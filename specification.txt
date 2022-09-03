@@ -1,0 +1,20 @@
+obj{
+	stream_configuration: obj{
+		video_ports: obj*{
+			width:u32{512\}
+			height:u32{512\}
+			channel_layout:str{Y\}
+			sample_type:str{f32\}
+			intensity_transfer_function:str{linear\}
+			alpha_mode:str{premultiplied\}\;
+		\}
+	\}
+\}
+obj{
+	message_type: str{video_frame\}
+	content: obj{
+		port: u32{0\}
+	\}
+\}
+<Binary data containing the image>
+...
