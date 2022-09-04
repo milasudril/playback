@@ -5,7 +5,7 @@
 
 namespace playback
 {
-	auto to_gl_format(channel_layout layout)
+	auto to_gl_format(video_channel_layout layout)
 	{
 		switch(layout)
 		{

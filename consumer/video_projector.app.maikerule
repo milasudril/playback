@@ -1,0 +1,4 @@
+{
+	"target":{"name":"video_projector"},
+	"dependencies":[{"ref":"./video_projector.o", "rel":"implementation", "origin":"generated"}]
+}
