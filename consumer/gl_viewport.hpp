@@ -1,12 +1,16 @@
 //@	{
-//@	 "dependencies":[{"ref": "glfw3", "origin":"pkg-config"}]
+//@	 "dependencies":[{"ref": "glfw3", "origin":"pkg-config"},
+//@		{"ref": "glew", "origin":"pkg-config"}]
 //@	}
 
 #ifndef PLAYBACK_GLVIEWPORT_HPP
 #define PLAYBACK_GLVIEWPORT_HPP
 
 #define GLFW_INCLUDE_NONE
+
 #include <GLFW/glfw3.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
 
 #include <memory>
 
@@ -75,6 +79,16 @@ namespace playback
 		void activate_gl_context()
 		{
 			glfwMakeContextCurrent(m_window.get());
+			static bool glew_initialized = false;
+			if(glew_initialized == false)
+			{
+				GLenum err = glewInit();
+				if (GLEW_OK != err)
+				{
+					throw std::runtime_error{"Failed to load OpenGL extensions"};
+				}
+				glew_initialized = true;
+			}
 		}
 
 		void swap_buffer()

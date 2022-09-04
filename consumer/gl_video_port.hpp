@@ -35,7 +35,7 @@ namespace playback
 			return *this;
 		}
 
-		gl_video_port& upload_pixels(std::span<std::byte> pixels) const
+		gl_video_port& upload_pixels(std::span<std::byte const> pixels) const
 		{
 			auto const pixel_size = get_pixel_size(m_config);
 			auto const pixel_count = get_pixel_count(m_config);

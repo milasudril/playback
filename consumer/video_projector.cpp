@@ -2,6 +2,7 @@
 
 #include "./dispatcher.hpp"
 #include "./gl_viewport.hpp"
+#include "./gl_buffer.hpp"
 
 #include <GL/gl.h>
 
