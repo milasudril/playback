@@ -3,12 +3,14 @@
 
 #include "messages.hpp"
 
+#include <span>
+
 namespace playback
 {
 	class device
 	{
 	public:
-		virtual void process(video_frame_update const&, FILE*) = 0;
+		virtual void process(video_frame_update const&, std::span<std::byte>) = 0;
 		virtual void process(stream_config const&) = 0;
 	};
 }

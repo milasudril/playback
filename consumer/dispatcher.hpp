@@ -10,7 +10,7 @@
 
 namespace playback
 {
-	void dispatch(FILE* src, device& dev, anon::object const& message);
+	void dispatch(device& dev, anon::object const& message, std::span<std::byte> payload);
 
 	void dispatch(FILE* src, device& dev);
 }
