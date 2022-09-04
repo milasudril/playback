@@ -44,12 +44,28 @@ namespace playback
 
 	char const* to_string(video_channel_layout val);
 
+	inline size_t get_channel_count(video_channel_layout layout)
+	{
+		// HACK: Correct for now, see above
+		return static_cast<size_t>(layout) + 1;
+	}
+
+
 
 	enum class sample_type:int{i8, u8, i16, u16, f32};
 
 	sample_type deserialize(empty<sample_type>, std::string_view str);
 
 	char const* to_string(sample_type type);
+
+	inline size_t  get_sample_size(sample_type type)
+	{
+		// HACK: Correct for now, see above
+		std::array<size_t, 5> sizes{1, 1, 2, 2, 4};
+
+		return sizes[static_cast<size_t>(type)];
+	}
+
 
 
 	struct video_port_config
@@ -61,6 +77,16 @@ namespace playback
 		enum intensity_transfer_function intensity_transfer_function;
 		enum alpha_mode alpha_mode;
 	};
+
+	inline size_t get_pixel_count(video_port_config const& cfg)
+	{
+		return static_cast<size_t>(cfg.width) * static_cast<size_t>(cfg.height);
+	}
+
+	inline size_t get_pixel_size(video_port_config const& cfg)
+	{
+		return get_channel_count(cfg.channel_layout) * get_sample_size(cfg.sample_type);
+	}
 
 	video_port_config deserialize(empty<video_port_config>, anon::object const&);
 
