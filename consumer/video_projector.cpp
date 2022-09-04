@@ -4,6 +4,7 @@
 #include "./gl_viewport.hpp"
 #include "./gl_buffer.hpp"
 #include "./gl_shader.hpp"
+#include "./gl_vertex_array.hpp"
 
 #include <GL/gl.h>
 
@@ -81,11 +82,15 @@ int main()
 
 	playback::gl_buffer vbo;
 	vbo.upload(std::as_bytes(std::span{std::begin(vertices), std::end(vertices)}));
+	playback::gl_vertex_array vao;
+	vao.set_vertex_buffer(0, vbo, 3*sizeof(float));
 	vbo.bind_to_array_buffer();
+	vao.bind();
 
 
 	ctxt.read_events([](auto& viewport, auto& eh){
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 		viewport.swap_buffer();
 		return eh.should_exit();
 	}, viewport, std::as_const(eh));

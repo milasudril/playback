@@ -46,6 +46,8 @@ namespace playback
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_buffer.get());
 		}
 
+		auto get() const { return m_buffer.get(); }
+
 	private:
 		gl_buffer_handle m_buffer;
 		size_t m_capacity;
