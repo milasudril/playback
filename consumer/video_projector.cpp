@@ -3,6 +3,8 @@
 #include "./dispatcher.hpp"
 #include "./gl_viewport.hpp"
 
+#include <GL/gl.h>
+
 namespace
 {
 	class event_handler
@@ -26,8 +28,12 @@ int main()
 	event_handler eh;
 	viewport.set_event_handler(eh);
 	viewport.activate_gl_context();
+
+	fprintf(stderr, "(i) Initialized OpenGL reporting version %s\n", glGetString(GL_VERSION));
+
 	glEnable(GL_FRAMEBUFFER_SRGB);
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+
 	ctxt.read_events([](auto& viewport, auto& eh){
 		glClear(GL_COLOR_BUFFER_BIT);
 		viewport.swap_buffer();

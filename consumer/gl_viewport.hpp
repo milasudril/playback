@@ -5,6 +5,7 @@
 #ifndef PLAYBACK_GLVIEWPORT_HPP
 #define PLAYBACK_GLVIEWPORT_HPP
 
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
 #include <memory>
