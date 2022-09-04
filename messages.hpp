@@ -45,11 +45,18 @@ namespace playback
 	char const* to_string(video_channel_layout val);
 
 
+	enum class sample_type:int{i8, u8, i16, u16, f32};
+
+	sample_type deserialize(empty<sample_type>, std::string_view str);
+
+	char const* to_string(sample_type type);
+
 
 	struct video_port_config
 	{
 		uint32_t width;
 		uint32_t height;
+		enum sample_type sample_type;
 		video_channel_layout channel_layout;
 		enum intensity_transfer_function intensity_transfer_function;
 		enum alpha_mode alpha_mode;

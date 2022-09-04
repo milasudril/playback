@@ -62,7 +62,7 @@ playback::video_channel_layout playback::deserialize(empty<video_channel_layout>
 	if(str == "rgba")
 	{ return video_channel_layout::rgba; }
 
-	throw std::runtime_error{"Unsupported channel layout"};
+	throw std::runtime_error{"Unsupported video channel layout"};
 }
 
 char const* playback::to_string(video_channel_layout val)
@@ -81,11 +81,51 @@ char const* playback::to_string(video_channel_layout val)
 	__builtin_unreachable();
 }
 
+playback::sample_type playback::deserialize(empty<sample_type>, std::string_view str)
+{
+	if(str == "i8")
+	{ return sample_type::i8; }
+
+	if(str == "u8")
+	{ return sample_type::u8; }
+
+	if(str == "i16")
+	{ return sample_type::i16; }
+
+	if(str == "u16")
+	{ return sample_type::u16; }
+
+	if(str == "f32")
+	{ return sample_type::f32; }
+
+	throw std::runtime_error{"Unsupported sample type"};
+}
+
+char const* playback::to_string(sample_type type)
+{
+	switch(type)
+	{
+		case sample_type::i8:
+			return "i8";
+		case sample_type::u8:
+			return "u8";
+		case sample_type::i16:
+			return "i16";
+		case sample_type::u16:
+			return "u16";
+		case sample_type::f32:
+			return "f32";
+	}
+
+	__builtin_unreachable();
+}
+
 playback::video_port_config playback::deserialize(empty<video_port_config>, anon::object const& obj)
 {
 	video_port_config ret{};
 	ret.width = std::get<uint32_t>(obj["width"]);
 	ret.height = std::get<uint32_t>(obj["height"]);
+	ret.sample_type = deserialize(empty<sample_type>{}, std::get<std::string>(obj["sample_type"]));
 	ret.channel_layout = deserialize(empty<video_channel_layout>{},
 		std::get<std::string>(obj["channel_layout"]));
 	ret.intensity_transfer_function = deserialize(empty<intensity_transfer_function>{},
@@ -100,6 +140,7 @@ anon::object playback::serialize(video_port_config const& cfg)
 	return anon::object{}
 		.insert_or_assign("width", cfg.width)
 		.insert_or_assign("height", cfg.height)
+		.insert_or_assign("sample_type", to_string(cfg.sample_type))
 		.insert_or_assign("channel_layout", to_string(cfg.channel_layout))
 		.insert_or_assign("intensity_transfer_function", to_string(cfg.intensity_transfer_function))
 		.insert_or_assign("alpha_mode", to_string(cfg.alpha_mode));
