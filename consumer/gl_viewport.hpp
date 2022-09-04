@@ -58,9 +58,23 @@ namespace playback
 	{
 	public:
 		explicit gl_viewport(glfw_context const&,
-			uint32_t width, uint32_t height, char const* title):
-			m_window{glfwCreateWindow(width, height, title, nullptr, nullptr)}
-		{}
+			uint32_t width, uint32_t height, char const* title)
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+			glfwWindowHint(GLFW_SRGB_CAPABLE, GLFW_TRUE);
+			glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
+			m_window.reset(glfwCreateWindow(width, height, title, nullptr, nullptr));
+			if(m_window == nullptr)
+			{
+				throw std::runtime_error{"Failed to create a window"};
+			}
+		}
+
+		void activate_gl_context()
+		{
+			glfwMakeContextCurrent(m_window.get());
+		}
 
 		void swap_buffer()
 		{
