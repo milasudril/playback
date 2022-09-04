@@ -36,7 +36,7 @@ namespace playback
 		template<class Callable, class ... Args>
 		void read_events(Callable&& f, Args&&... args)
 		{
-			while(f(args...))
+			while(!f(args...))
 			{
 				glfwPollEvents();
 			}
@@ -65,6 +65,16 @@ namespace playback
 		void swap_buffer()
 		{
 			glfwSwapBuffers(m_window.get());
+		}
+
+		template<class EventHandler>
+		void set_event_handler(EventHandler& eh)
+		{
+			glfwSetWindowUserPointer(m_window.get(), &eh);
+			glfwSetWindowCloseCallback(m_window.get(), [](GLFWwindow* window){
+				auto eh = static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
+				eh->window_is_closing();
+			});
 		}
 
 	private:
