@@ -40,12 +40,12 @@ namespace playback
 			glNamedBufferSubData(m_buffer.get(), 0, std::size(data), std::data(data));
 		}
 
-		void use_as_vertex_array()
+		void bind_to_array_buffer()
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, m_buffer.get());
 		}
 
-		void use_as_vertex_index_array()
+		void bind_to_element_buffer()
 		{
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_buffer.get());
 		}

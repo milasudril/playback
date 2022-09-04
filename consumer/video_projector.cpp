@@ -22,6 +22,17 @@ namespace
 	};
 }
 
+constexpr std::array<float, 18> vertices{
+    // first triangle
+     0.5f,  0.5f, 0.0f,  // top right
+     0.5f, -0.5f, 0.0f,  // bottom right
+    -0.5f,  0.5f, 0.0f,  // top left
+    // second triangle
+     0.5f, -0.5f, 0.0f,  // bottom right
+    -0.5f, -0.5f, 0.0f,  // bottom left
+    -0.5f,  0.5f, 0.0f   // top left
+};
+
 int main()
 {
 	auto& ctxt = playback::glfw_context::get();
@@ -34,6 +45,11 @@ int main()
 
 	glEnable(GL_FRAMEBUFFER_SRGB);
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+
+	playback::gl_buffer vbo;
+	vbo.upload(std::as_bytes(std::span{std::begin(vertices), std::end(vertices)}));
+	vbo.bind_to_array_buffer();
+
 
 	ctxt.read_events([](auto& viewport, auto& eh){
 		glClear(GL_COLOR_BUFFER_BIT);
