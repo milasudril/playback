@@ -1,5 +1,5 @@
 obj{
-	stream_configuration: obj{
+	stream_config: obj{
 		video_ports: obj*{
 			width:u32{512\}
 			height:u32{512\}
@@ -11,7 +11,7 @@ obj{
 	\}
 \}
 obj{
-	message_type: str{video_frame\}
+	message_type: str{video_frame_update\}
 	content: obj{
 		port: u32{0\}
 	\}
