@@ -38,11 +38,11 @@ namespace playback
 
 
 
-	enum class channel_layout:int{y, ya, rgb, rgba};
+	enum class video_channel_layout:int{y, ya, rgb, rgba};
 
-	channel_layout deserialize(empty<channel_layout>, std::string_view str);
+	video_channel_layout deserialize(empty<video_channel_layout>, std::string_view str);
 
-	char const* to_string(channel_layout val);
+	char const* to_string(video_channel_layout val);
 
 
 
@@ -50,7 +50,7 @@ namespace playback
 	{
 		uint32_t width;
 		uint32_t height;
-		enum channel_layout channel_layout;
+		video_channel_layout channel_layout;
 		enum intensity_transfer_function intensity_transfer_function;
 		enum alpha_mode alpha_mode;
 	};

@@ -48,34 +48,34 @@ char const* playback::to_string(alpha_mode val)
 	__builtin_unreachable();
 }
 
-playback::channel_layout playback::deserialize(empty<channel_layout>, std::string_view str)
+playback::video_channel_layout playback::deserialize(empty<video_channel_layout>, std::string_view str)
 {
 	if(str == "y")
-	{ return channel_layout::y; }
+	{ return video_channel_layout::y; }
 
 	if(str == "ya")
-	{ return channel_layout::ya; }
+	{ return video_channel_layout::ya; }
 
 	if(str == "rgb")
-	{ return channel_layout::rgb; }
+	{ return video_channel_layout::rgb; }
 
 	if(str == "rgba")
-	{ return channel_layout::rgba; }
+	{ return video_channel_layout::rgba; }
 
 	throw std::runtime_error{"Unsupported channel layout"};
 }
 
-char const* playback::to_string(channel_layout val)
+char const* playback::to_string(video_channel_layout val)
 {
 	switch(val)
 	{
-		case channel_layout::y:
+		case video_channel_layout::y:
 			return "y";
-		case channel_layout::ya:
+		case video_channel_layout::ya:
 			return "ya";
-		case channel_layout::rgb:
+		case video_channel_layout::rgb:
 			return "rgb";
-		case channel_layout::rgba:
+		case video_channel_layout::rgba:
 			return "rgba";
 	}
 	__builtin_unreachable();
@@ -86,7 +86,7 @@ playback::video_port_config playback::deserialize(empty<video_port_config>, anon
 	video_port_config ret{};
 	ret.width = std::get<uint32_t>(obj["width"]);
 	ret.height = std::get<uint32_t>(obj["height"]);
-	ret.channel_layout = deserialize(empty<channel_layout>{},
+	ret.channel_layout = deserialize(empty<video_channel_layout>{},
 		std::get<std::string>(obj["channel_layout"]));
 	ret.intensity_transfer_function = deserialize(empty<intensity_transfer_function>{},
 		std::get<std::string>(obj["intensity_transfer_function"]));
