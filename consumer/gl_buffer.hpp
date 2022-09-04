@@ -1,7 +1,3 @@
-//@	{
-//@	 "dependencies":[{"ref": "glfw3", "origin":"pkg-config"}]
-//@	}
-
 #ifndef PLAYBACK_GLBUFFER_HPP
 #define PLAYBACK_GLBUFFER_HPP
 
