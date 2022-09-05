@@ -50,6 +50,12 @@ namespace playback
 			glEnableVertexArrayAttrib(m_handle.get(), port);
 		}
 
+		template<class T>
+		void set_buffer(gl_index_buffer<T> const& buffer)
+		{
+			glVertexArrayElementBuffer(m_handle.get(), buffer.get());
+		}
+
 		void bind()
 		{
 			glBindVertexArray(m_handle.get());

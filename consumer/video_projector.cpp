@@ -60,15 +60,16 @@ struct vec3
 	scalar_type z;
 };
 
-constexpr std::array<vec3, 6> vertices{
-	// first triangle
+constexpr std::array<vec3, 4> vertices{
 	vec3{ 0.5f,  0.5f, 0.0f},  // top right
-	vec3{ 0.5f, -0.5f, 0.0f},  // bottom right
-	vec3{-0.5f,  0.5f, 0.0f},  // top left
-	// second triangle
 	vec3{ 0.5f, -0.5f, 0.0f},  // bottom right
 	vec3{-0.5f, -0.5f, 0.0f},  // bottom left
 	vec3{-0.5f,  0.5f, 0.0f}   // top left
+};
+
+constexpr std::array<unsigned int, 6> faces{
+	0, 1, 3,
+	1, 2, 3
 };
 
 int main()
@@ -87,20 +88,22 @@ int main()
 	playback::gl_shader<GL_VERTEX_SHADER> vertex_shader{vertex_shader_src};
 	playback::gl_shader<GL_FRAGMENT_SHADER> frag_shader{frag_shader_src};
 	playback::gl_program prog{vertex_shader, frag_shader};
-	prog.use();
+	prog.bind();
 
 	playback::gl_vertex_buffer<vec3> vbo;
 	vbo.upload(vertices);
+	playback::gl_index_buffer<unsigned int> ibo;
+	ibo.upload(faces);
 	playback::gl_vertex_array vao;
 	vao.set_buffer(0, vbo);
-	vbo.bind_to_array_buffer();
+	vao.set_buffer(ibo);
 	vao.bind();
 
 
-	ctxt.read_events([](auto& viewport, auto& eh, auto& vbo){
+	ctxt.read_events([](auto& viewport, auto& eh){
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-		glDrawArrays(GL_TRIANGLES, 0, std::size(vbo));
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		viewport.swap_buffer();
 		return eh.should_exit();
-	}, viewport, std::as_const(eh), std::as_const(vbo));
+	}, viewport, std::as_const(eh));
 }

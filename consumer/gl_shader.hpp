@@ -57,7 +57,7 @@ namespace playback
 			glLinkProgram(m_handle.get());
 		}
 
-		void use() const
+		void bind() const
 		{
 			glUseProgram(m_handle.get());
 		}
