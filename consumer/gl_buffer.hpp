@@ -19,10 +19,10 @@ namespace playback
 	using gl_buffer_handle = gl_resource<gl_buffer_deleter>;
 
 	template<class T>
-	class gl_buffer
+	class gl_vertex_buffer
 	{
 	public:
-		explicit gl_buffer():m_capacity{0}
+		explicit gl_vertex_buffer():m_capacity{0}
 		{
 			GLuint buffer;
 			glCreateBuffers(1, & buffer);
@@ -43,13 +43,6 @@ namespace playback
 		void bind_to_array_buffer()
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, m_buffer.get());
-		}
-
-		template<class Dummy = void>
-		requires std::integral<T>
-		void bind_to_element_buffer()
-		{
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_buffer.get());
 		}
 
 		auto get() const { return m_buffer.get(); }

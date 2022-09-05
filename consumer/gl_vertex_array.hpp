@@ -18,6 +18,18 @@ namespace playback
 
 	using gl_vertex_array_handle = gl_resource<gl_vertex_array_deleter>;
 
+	template<class T>
+	struct to_gl_type_id;
+
+	template<>
+	struct to_gl_type_id<float>
+	{
+		static constexpr auto value = GL_FLOAT;
+	};
+
+	template<class T>
+	constexpr auto to_gl_type_id_v = to_gl_type_id<T>::value;
+
 	class gl_vertex_array
 	{
 	public:
@@ -29,10 +41,12 @@ namespace playback
 		}
 
 		template<class T>
-		void set_vertex_buffer(GLuint port, gl_buffer<T> const& buffer)
+		void set_buffer(GLuint port, gl_vertex_buffer<T> const& buffer)
 		{
+			using scalar_type = typename T::scalar_type;
+
 			glVertexArrayVertexBuffer(m_handle.get(), port, buffer.get(), 0, sizeof(T));
-			glVertexArrayAttribFormat(m_handle.get(), port, 3, GL_FLOAT, GL_FALSE, 0);
+			glVertexArrayAttribFormat(m_handle.get(), port, 3, to_gl_type_id_v<scalar_type>, GL_FALSE, 0);
 			glEnableVertexArrayAttrib(m_handle.get(), port);
 		}
 

@@ -53,9 +53,11 @@ void main()
 
 struct vec3
 {
-	float x;
-	float y;
-	float z;
+	using scalar_type = float;
+
+	scalar_type x;
+	scalar_type y;
+	scalar_type z;
 };
 
 constexpr std::array<vec3, 6> vertices{
@@ -87,10 +89,10 @@ int main()
 	playback::gl_program prog{vertex_shader, frag_shader};
 	prog.use();
 
-	playback::gl_buffer<vec3> vbo;
+	playback::gl_vertex_buffer<vec3> vbo;
 	vbo.upload(vertices);
 	playback::gl_vertex_array vao;
-	vao.set_vertex_buffer(0, vbo);
+	vao.set_buffer(0, vbo);
 	vbo.bind_to_array_buffer();
 	vao.bind();
 
