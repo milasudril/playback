@@ -4,6 +4,7 @@
 #include "./gl_resource.hpp"
 
 #include <memory>
+#include <type_traits>
 
 namespace playback
 {
@@ -17,6 +18,7 @@ namespace playback
 
 	using gl_buffer_handle = gl_resource<gl_buffer_deleter>;
 
+	template<class T>
 	class gl_buffer
 	{
 	public:
@@ -27,13 +29,15 @@ namespace playback
 			m_buffer.reset(buffer);
 		}
 
-		void upload(std::span<std::byte const> data)
+		void upload(std::span<T const> data)
 		{
+			auto const buffer_size = sizeof(T) * std::size(data);
 			if(std::size(data) != m_capacity)
 			{
-				glNamedBufferStorage(m_buffer.get(), std::size(data), nullptr, GL_DYNAMIC_STORAGE_BIT);
+				glNamedBufferStorage(m_buffer.get(), buffer_size, nullptr, GL_DYNAMIC_STORAGE_BIT);
+				m_capacity = std::size(data);
 			}
-			glNamedBufferSubData(m_buffer.get(), 0, std::size(data), std::data(data));
+			glNamedBufferSubData(m_buffer.get(), 0, buffer_size, std::data(data));
 		}
 
 		void bind_to_array_buffer()
@@ -41,6 +45,8 @@ namespace playback
 			glBindBuffer(GL_ARRAY_BUFFER, m_buffer.get());
 		}
 
+		template<class Dummy = void>
+		requires std::integral<T>
 		void bind_to_element_buffer()
 		{
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_buffer.get());

@@ -28,9 +28,10 @@ namespace playback
 			m_handle.reset(handle);
 		}
 
-		void set_vertex_buffer(GLuint port, gl_buffer const& buffer, GLsizei element_size)
+		template<class T>
+		void set_vertex_buffer(GLuint port, gl_buffer<T> const& buffer)
 		{
-			glVertexArrayVertexBuffer(m_handle.get(), port, buffer.get(), 0, element_size);
+			glVertexArrayVertexBuffer(m_handle.get(), port, buffer.get(), 0, sizeof(T));
 			glVertexArrayAttribFormat(m_handle.get(), port, 3, GL_FLOAT, GL_FALSE, 0);
 			glEnableVertexArrayAttrib(m_handle.get(), port);
 		}

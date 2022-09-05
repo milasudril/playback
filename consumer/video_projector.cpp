@@ -51,15 +51,22 @@ void main()
 	FragColor = vertexColor*light/distance;
 })";
 
-constexpr std::array<float, 18> vertices{
-    // first triangle
-     0.5f,  0.5f, 0.0f,  // top right
-     0.5f, -0.5f, 0.0f,  // bottom right
-    -0.5f,  0.5f, 0.0f,  // top left
-    // second triangle
-     0.5f, -0.5f, 0.0f,  // bottom right
-    -0.5f, -0.5f, 0.0f,  // bottom left
-    -0.5f,  0.5f, 0.0f   // top left
+struct vec3
+{
+	float x;
+	float y;
+	float z;
+};
+
+constexpr std::array<vec3, 6> vertices{
+	// first triangle
+	vec3{ 0.5f,  0.5f, 0.0f},  // top right
+	vec3{ 0.5f, -0.5f, 0.0f},  // bottom right
+	vec3{-0.5f,  0.5f, 0.0f},  // top left
+	// second triangle
+	vec3{ 0.5f, -0.5f, 0.0f},  // bottom right
+	vec3{-0.5f, -0.5f, 0.0f},  // bottom left
+	vec3{-0.5f,  0.5f, 0.0f}   // top left
 };
 
 int main()
@@ -80,10 +87,10 @@ int main()
 	playback::gl_program prog{vertex_shader, frag_shader};
 	prog.use();
 
-	playback::gl_buffer vbo;
-	vbo.upload(std::as_bytes(std::span{std::begin(vertices), std::end(vertices)}));
+	playback::gl_buffer<vec3> vbo;
+	vbo.upload(vertices);
 	playback::gl_vertex_array vao;
-	vao.set_vertex_buffer(0, vbo, 3*sizeof(float));
+	vao.set_vertex_buffer(0, vbo);
 	vbo.bind_to_array_buffer();
 	vao.bind();
 
