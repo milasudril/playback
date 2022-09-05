@@ -54,6 +54,8 @@ namespace playback
 
 		auto get() const { return m_buffer.get(); }
 
+		auto const size() const { return m_capacity; }
+
 	private:
 		gl_buffer_handle m_buffer;
 		size_t m_capacity;

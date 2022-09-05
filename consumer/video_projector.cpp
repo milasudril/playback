@@ -95,10 +95,10 @@ int main()
 	vao.bind();
 
 
-	ctxt.read_events([](auto& viewport, auto& eh){
+	ctxt.read_events([](auto& viewport, auto& eh, auto& vbo){
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDrawArrays(GL_TRIANGLES, 0, std::size(vbo));
 		viewport.swap_buffer();
 		return eh.should_exit();
-	}, viewport, std::as_const(eh));
+	}, viewport, std::as_const(eh), std::as_const(vbo));
 }
