@@ -3,8 +3,12 @@
 
 #include "messages.hpp"
 
+#include "./gl_buffer.hpp"
+#include "./gl_vertex_array.hpp"
+
 namespace playback
 {
+#if 0
 	auto to_gl_format(video_channel_layout layout)
 	{
 		switch(layout)
@@ -20,10 +24,12 @@ namespace playback
 		}
 		__builtin_unreachable();
 	}
+#endif
 
 	class gl_video_port
 	{
 	public:
+#if 0
 		gl_video_port& configure(video_port_config const& cfg)
 		{
 			if(m_config != cfg)
@@ -52,9 +58,14 @@ namespace playback
 				std::data(pixels));
 			return *this;
 		}
+#endif
 
 	private:
-		texture_handle m_texture;
+		gl_buffer m_vertices;
+		gl_buffer m_uvs;
+		gl_buffer m_faces;
+		gl_vertex_array m_verex_array;
+	//	gl_texture m_texture;
 		video_port_config m_config;
 	};
 }
