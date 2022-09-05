@@ -84,6 +84,18 @@ namespace playback
 			upload_impl(data);
 		}
 
+		void set_parameter(GLenum name, GLint value)
+		{glTextureParameteri(m_handle.get(), name, value);}
+
+		void set_parameter(GLenum name, float value)
+		{glTextureParameterf(m_handle.get(), name, value);}
+
+		void bind(GLenum texture_unit)
+		{
+			glActiveTexture(texture_unit);
+			glBindTexture(GL_TEXTURE_2D, m_handle.get());
+		}
+
 	private:
 		void upload_impl(std::span<std::byte const> data)
 		{
