@@ -99,11 +99,10 @@ int main()
 	vao.set_buffer(ibo);
 	vao.bind();
 
-
-	ctxt.read_events([](auto& viewport, auto& eh){
+	ctxt.read_events([](auto& viewport, auto& eh, size_t vertex_count){
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, vertex_count, playback::gl_bindings::vertex_index_type(), nullptr);
 		viewport.swap_buffer();
 		return eh.should_exit();
-	}, viewport, std::as_const(eh));
+	}, viewport, std::as_const(eh), std::size(ibo));
 }

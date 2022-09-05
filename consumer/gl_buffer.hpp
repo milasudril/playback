@@ -49,7 +49,7 @@ namespace playback
 		size_t m_capacity;
 	};
 
-	template<std::integral T>
+	template<std::unsigned_integral T>
 	class gl_index_buffer
 	{
 	public:
