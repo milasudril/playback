@@ -1,3 +1,6 @@
 [submodule "testfwk"]
 	path = testfwk
 	url = https://github.com/milasudril/testfwk
+[submodule "pixel_store"]
+	path = pixel_store
+	url = https://github.com/milasudril/pixel_store

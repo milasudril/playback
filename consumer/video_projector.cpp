@@ -5,6 +5,7 @@
 #include "./gl_buffer.hpp"
 #include "./gl_shader.hpp"
 #include "./gl_vertex_array.hpp"
+#include "./gl_texture.hpp"
 
 #include <GL/gl.h>
 
