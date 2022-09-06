@@ -4,6 +4,8 @@
 #include <GL/glew.h>
 #include <GL/gl.h>
 
+#include <memory>
+
 namespace playback
 {
 	template<class Int>

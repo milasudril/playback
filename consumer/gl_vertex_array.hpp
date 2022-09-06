@@ -3,6 +3,7 @@
 
 #include "./gl_resource.hpp"
 #include "./gl_buffer.hpp"
+#include "./gl_types.hpp"
 
 #include <memory>
 
@@ -17,30 +18,6 @@ namespace playback
 	};
 
 	using gl_vertex_array_handle = gl_resource<gl_vertex_array_deleter>;
-
-	template<class T>
-	struct to_gl_type_id;
-
-	template<>
-	struct to_gl_type_id<float>
-	{
-		static constexpr auto value = GL_FLOAT;
-	};
-
-	template<>
-	struct to_gl_type_id<unsigned int>
-	{
-		static constexpr auto value = GL_UNSIGNED_INT;
-	};
-
-	template<>
-	struct to_gl_type_id<unsigned short>
-	{
-		static constexpr auto value = GL_UNSIGNED_SHORT;
-	};
-
-	template<class T>
-	constexpr auto to_gl_type_id_v = to_gl_type_id<T>::value;
 
 	class gl_bindings
 	{

@@ -4,3 +4,6 @@
 [submodule "pixel_store"]
 	path = pixel_store
 	url = https://github.com/milasudril/pixel_store
+[submodule "test_pattern"]
+	path = test_pattern
+	url = https://github.com/milasudril/test_pattern

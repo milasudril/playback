@@ -1,10 +1,12 @@
+//@	{"dependencies_extra":[{"ref":"./gl_texture.o", "rel":"implementation"}]}
+
 #ifndef PLAYBACK_GLTEXTURE_HPP
 #define PLAYBACK_GLTEXTURE_HPP
 
 #include "./gl_resource.hpp"
+#include "./gl_types.hpp"
 #include "pixel_store/image_span.hpp"
-
-#include <memory>
+#include "pixel_store/rgba_value.hpp"
 
 namespace playback
 {
@@ -26,29 +28,33 @@ namespace playback
 		GLenum type;
 		GLsizei num_mipmaps;
 
-
 		auto operator<=>(gl_texture_descriptor const& other) const = default;
 	};
+
+	template<class T>
+	struct to_gl_color_channel_layout;
+
+	template<>
+	struct to_gl_color_channel_layout<pixel_store::rgba_value<>>
+	{
+		static constexpr auto value = GL_RGBA;
+	};
+
+	GLenum gl_make_sized_format_rgba(GLenum type);
+
+	GLenum gl_make_sized_format(GLenum format, GLenum type);
+
+	size_t gl_get_pixel_size(GLenum format, GLenum type);
+
+	inline auto get_image_size(gl_texture_descriptor const& descriptor)
+	{
+		return descriptor.width*descriptor.height*gl_get_pixel_size(descriptor.format, descriptor.type);
+	}
 
 	class gl_texture
 	{
 	public:
 		explicit gl_texture():m_descriptor{0, 0, 0, 0, 0}{}
-
-		template<class T>
-		void upload(pixel_store::image_span<T const> pixels, GLsizei num_mipmaps) const
-		{
-			auto const descriptor = gl_texture_descriptor
-			{
-				pixels.width(),
-				pixels.height(),
-				to_gl_color_channel_layout_v<T>,
-				to_gl_type_id_v<T>,
-				num_mipmaps
-			};
-
-			upload(std::as_bytes(std::data(pixels)), descriptor);
-		}
 
 		void upload(std::span<std::byte const> data, gl_texture_descriptor const& descriptor)
 		{
@@ -58,6 +64,22 @@ namespace playback
 			}
 
 			upload_impl(data);
+		}
+
+		template<class T>
+		void upload(pixel_store::image_span<T const> pixels, GLsizei num_mipmaps)
+		{
+			gl_texture_descriptor const descriptor{
+				static_cast<GLsizei>(pixels.width()),
+				static_cast<GLsizei>(pixels.height()),
+				to_gl_color_channel_layout<T>::value,
+				to_gl_type_id_v<T>,
+				num_mipmaps
+			};
+
+			std::span const pixel_array{std::data(pixels), pixels.width()*pixels.height()};
+
+			upload(std::as_bytes(pixel_array), descriptor);
 		}
 
 		void set_format(gl_texture_descriptor const& descriptor)

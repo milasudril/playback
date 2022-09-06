@@ -9,6 +9,10 @@
 
 #include <GL/gl.h>
 
+#include <filesystem>
+#include <concepts>
+#include <type_traits>
+
 namespace
 {
 	class event_handler
@@ -73,6 +77,27 @@ constexpr std::array<unsigned int, 6> faces{
 	1, 2, 3
 };
 
+template<class T>
+requires(std::is_trivial_v<T>)
+auto load_binary(std::filesystem::path const& path)
+{
+	std::vector<T> data;
+	std::unique_ptr<FILE, decltype(&fclose)> file{fopen(path.c_str(), "rb"), fclose};
+	if(file == nullptr)
+	{ throw std::runtime_error{"Failed to open input file"}; }
+
+	std::array<T, 4096> buffer;
+
+	while(true)
+	{
+		auto const n = fread(std::data(buffer), sizeof(T), std::size(buffer), file.get());
+		if(n == 0)
+		{ return data; }
+		std::copy_n(std::begin(buffer), n, std::back_inserter(data));
+	}
+
+}
+
 int main()
 {
 	auto& ctxt = playback::glfw_context::get();
@@ -91,6 +116,7 @@ int main()
 	playback::gl_program prog{vertex_shader, frag_shader};
 	prog.bind();
 
+
 	playback::gl_vertex_buffer<vec3> vbo;
 	vbo.upload(vertices);
 	playback::gl_index_buffer<unsigned int> ibo;
@@ -99,6 +125,12 @@ int main()
 	vao.set_buffer(0, vbo);
 	vao.set_buffer(ibo);
 	vao.bind();
+
+	auto const test_pattern =
+		load_binary<pixel_store::rgba_value<>>("/usr/share/test_pattern/test_pattern.rgba");
+	playback::gl_texture texture;
+	texture.upload(pixel_store::image_span{std::data(test_pattern), 1600, 1000}, 10);
+	texture.bind(GL_TEXTURE0);
 
 	ctxt.read_events([](auto& viewport, auto& eh, size_t vertex_count){
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
