@@ -77,10 +77,10 @@ constexpr std::array<vec3, 4> vertices{
 };
 
 constexpr std::array<vec2, 4> uvs{
-	vec2{ 1.0f,  0.0f},  // bottom right
-	vec2{ 1.0f,  1.0f},  // top right
-	vec2{ 0.0f,  1.0f},   // top left
-	vec2{ 0.0f,  0.0f}  // bottom left
+	vec2{ 1.0f,  0.0f},
+	vec2{ 1.0f,  1.0f},
+	vec2{ 0.0f,  1.0f},
+	vec2{ 0.0f,  0.0f}
 };
 
 constexpr std::array<unsigned int, 6> faces{
