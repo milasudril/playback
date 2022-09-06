@@ -41,10 +41,10 @@ namespace playback
 		template<class T>
 		void set_buffer(GLuint port, gl_vertex_buffer<T> const& buffer)
 		{
-			using scalar_type = typename T::scalar_type;
+			using value_type = typename T::value_type;
 
 			glVertexArrayVertexBuffer(m_handle.get(), port, buffer.get(), 0, sizeof(T));
-			glVertexArrayAttribFormat(m_handle.get(), port, 3, to_gl_type_id_v<scalar_type>, GL_FALSE, 0);
+			glVertexArrayAttribFormat(m_handle.get(), port, 3, to_gl_type_id_v<value_type>, GL_FALSE, 0);
 			glEnableVertexArrayAttrib(m_handle.get(), port);
 		}
 

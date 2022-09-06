@@ -58,11 +58,11 @@ void main()
 
 struct vec3
 {
-	using scalar_type = float;
+	using value_type = float;
 
-	scalar_type x;
-	scalar_type y;
-	scalar_type z;
+	value_type x;
+	value_type y;
+	value_type z;
 };
 
 constexpr std::array<vec3, 4> vertices{
