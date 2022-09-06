@@ -32,28 +32,24 @@ namespace
 constexpr const char* vertex_shader_src = R"(#version 450 core
 
 layout (location = 0) in vec3 aPos;
-out vec3 vertexPos;
-out vec4 vertexColor;
+layout (location = 1) in vec2 uv;
+out vec2 tex_coord;
 
 void main()
 {
 	gl_Position = vec4(aPos, 1.0);
-	vertexColor = 0.16*vec4(1, 0.25, 0.5, 1.0);
-	vertexPos = aPos;
+	tex_coord = uv;
 })";
 
 constexpr const char* frag_shader_src = R"(#version 450 core
 out vec4 FragColor;
-in vec4 vertexColor;
-in vec3 vertexPos;
-layout (location = 1) uniform vec2 lightpos;
+in vec2 tex_coord;
+
+layout (location = 0) uniform sampler2D diffuse;
 
 void main()
 {
-	vec3 d = vec3(lightpos, 0.25) - vertexPos;
-	float distance = sqrt( dot(d, d) );
-	vec4 light = vec4(1, 1, 1, 1);
-	FragColor = vertexColor*light/distance;
+	FragColor = texture(diffuse, tex_coord);
 })";
 
 struct vec3
@@ -65,6 +61,14 @@ struct vec3
 	value_type z;
 };
 
+struct vec2
+{
+	using value_type = float;
+
+	value_type u;
+	value_type v;
+};
+
 constexpr std::array<vec3, 4> vertices{
 	vec3{ 0.5f,  0.5f, 0.0f},  // top right
 	vec3{ 0.5f, -0.5f, 0.0f},  // bottom right
@@ -72,9 +76,16 @@ constexpr std::array<vec3, 4> vertices{
 	vec3{-0.5f,  0.5f, 0.0f}   // top left
 };
 
+constexpr std::array<vec2, 4> uvs{
+	vec2{ 1.0f,  0.0f},  // bottom right
+	vec2{ 1.0f,  1.0f},  // top right
+	vec2{ 0.0f,  1.0f},   // top left
+	vec2{ 0.0f,  0.0f}  // bottom left
+};
+
 constexpr std::array<unsigned int, 6> faces{
-	0, 1, 3,
-	1, 2, 3
+	0, 3, 1,
+	3, 2, 1
 };
 
 template<class T>
@@ -119,10 +130,15 @@ int main()
 
 	playback::gl_vertex_buffer<vec3> vbo;
 	vbo.upload(vertices);
+
+	playback::gl_vertex_buffer<vec2> uv_buff;
+	uv_buff.upload(uvs);
+
 	playback::gl_index_buffer<unsigned int> ibo;
 	ibo.upload(faces);
 	playback::gl_vertex_array vao;
 	vao.set_buffer(0, vbo);
+	vao.set_buffer(1, uv_buff);
 	vao.set_buffer(ibo);
 	vao.bind();
 
