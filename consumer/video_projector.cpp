@@ -118,15 +118,9 @@ int main()
 	playback::gl_program prog{vertex_shader, frag_shader};
 	prog.bind();
 
-
-	playback::gl_vertex_buffer<vec3> vbo;
-	vbo.upload(vertices);
-
-	playback::gl_vertex_buffer<playback::uv_coords> uv_buff;
-	uv_buff.upload(uvs);
-
-	playback::gl_index_buffer<unsigned int> ibo;
-	ibo.upload(faces);
+	playback::gl_vertex_buffer vbo{vertices};
+	playback::gl_vertex_buffer uv_buff{uvs};
+	playback::gl_index_buffer ibo{faces};
 	
 	playback::gl_mesh mesh{std::move(vbo), std::move(uv_buff), std::move(ibo)};
 	mesh.bind();
