@@ -2,7 +2,7 @@
 
 #include "./dispatcher.hpp"
 #include "./gl_viewport.hpp"
-#include "./mesh.hpp"
+#include "./gl_mesh.hpp"
 #include "./gl_shader.hpp"
 #include "./gl_texture.hpp"
 
