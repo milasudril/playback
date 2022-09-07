@@ -2,9 +2,8 @@
 
 #include "./dispatcher.hpp"
 #include "./gl_viewport.hpp"
-#include "./gl_buffer.hpp"
+#include "./mesh.hpp"
 #include "./gl_shader.hpp"
-#include "./gl_vertex_array.hpp"
 #include "./gl_texture.hpp"
 
 #include <GL/gl.h>
@@ -61,14 +60,6 @@ struct vec3
 	value_type z;
 };
 
-struct vec2
-{
-	using value_type = float;
-
-	value_type u;
-	value_type v;
-};
-
 constexpr std::array<vec3, 4> vertices{
 	vec3{ 0.5f,  0.5f, 0.0f},  // top right
 	vec3{ 0.5f, -0.5f, 0.0f},  // bottom right
@@ -76,11 +67,11 @@ constexpr std::array<vec3, 4> vertices{
 	vec3{-0.5f,  0.5f, 0.0f}   // top left
 };
 
-constexpr std::array<vec2, 4> uvs{
-	vec2{ 1.0f,  0.0f},
-	vec2{ 1.0f,  1.0f},
-	vec2{ 0.0f,  1.0f},
-	vec2{ 0.0f,  0.0f}
+constexpr std::array<playback::uv_coords, 4> uvs{
+	playback::uv_coords{ 1.0f,  0.0f},
+	playback::uv_coords{ 1.0f,  1.0f},
+	playback::uv_coords{ 0.0f,  1.0f},
+	playback::uv_coords{ 0.0f,  0.0f}
 };
 
 constexpr std::array<unsigned int, 6> faces{
@@ -131,7 +122,7 @@ int main()
 	playback::gl_vertex_buffer<vec3> vbo;
 	vbo.upload(vertices);
 
-	playback::gl_vertex_buffer<vec2> uv_buff;
+	playback::gl_vertex_buffer<playback::uv_coords> uv_buff;
 	uv_buff.upload(uvs);
 
 	playback::gl_index_buffer<unsigned int> ibo;
