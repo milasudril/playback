@@ -18,6 +18,12 @@ namespace playback
 		friend bool operator!=(std::nullptr_t, nullable const& self) {return static_cast<bool>(self);}
 		friend bool operator==(nullable const& self, std::nullptr_t) {return !static_cast<bool>(self);}
 		friend bool operator!=(nullable const& self, std::nullptr_t) {return static_cast<bool>(self);}
+		nullable& operator=(std::nullptr_t)
+		{
+			val = 0;
+			return *this;
+		}
+		
 		operator Int() const {return val;}
 	};
 

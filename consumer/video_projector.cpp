@@ -127,11 +127,9 @@ int main()
 
 	playback::gl_index_buffer<unsigned int> ibo;
 	ibo.upload(faces);
-	playback::gl_vertex_array vao;
-	vao.set_buffer(0, vbo);
-	vao.set_buffer(1, uv_buff);
-	vao.set_buffer(ibo);
-	vao.bind();
+	
+	playback::gl_mesh mesh{std::move(vbo), std::move(uv_buff), std::move(ibo)};
+	mesh.bind();
 
 	auto const test_pattern =
 		load_binary<pixel_store::rgba_value<>>("/usr/share/test_pattern/test_pattern.rgba");

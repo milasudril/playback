@@ -16,10 +16,13 @@ namespace playback
 	};
 	
 	template<class VertexType, class IndexType>
-	class mesh
+	class gl_mesh
 	{
 		public:
-			explicit mesh(gl_vertex_buffer<VertexType>&& verts,
+			static constexpr auto vertex_shader_port = 0;
+			static constexpr auto uv_shader_port = 1;
+			
+			explicit gl_mesh(gl_vertex_buffer<VertexType>&& verts,
 				gl_vertex_buffer<uv_coords>&& uvs,
 				gl_index_buffer<IndexType>&& faces):
 				m_verts{std::move(verts)},
@@ -32,8 +35,8 @@ namespace playback
 				if(std::size(m_faces) % 3 != 0)
 				{ throw std::runtime_error{"Bad number of vertex indices"}; }
 				
-				m_vao.set_buffer(0, m_verts);
-				m_vao.set_buffer(1, m_uvs);
+				m_vao.set_buffer(vertex_shader_port, m_verts);
+				m_vao.set_buffer(uv_shader_port, m_uvs);
 				m_vao.set_buffer(m_faces);
 			}
 			
