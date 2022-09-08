@@ -104,6 +104,10 @@ namespace playback
 				auto eh = static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
 				eh->window_is_closing();
 			});
+			glfwSetFramebufferSizeCallback(m_window.get(), [](GLFWwindow* window, int w, int h){
+				auto eh = static_cast<EventHandler*>(glfwGetWindowUserPointer(window));
+				eh->framebuffer_size_changed(w, h);
+			});
 		}
 
 	private:

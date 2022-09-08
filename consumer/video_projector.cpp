@@ -23,6 +23,9 @@ namespace
 		bool should_exit() const { return m_should_exit; }
 
 		void window_is_closing() { m_should_exit = true; }
+		
+		void framebuffer_size_changed(int w, int h)
+		{ glViewport(0,0, w, h); }
 
 	private:
 		bool m_should_exit;
