@@ -37,9 +37,41 @@ namespace playback
 		return point{0.0f, 0.0f, 0.0f};
 	}
 	
-	template<class VertexType, class IndexType>
+	template<template<class> class VertexBufferType, class IndexBufferType>
 	class cpu_mesh
 	{
+	public:
+		using point_array = VertexBufferType<point>;
+		using uv_array = VertexBufferType<uv_coords>;
+		using face_array = IndexBufferType;
+
+		constexpr explicit cpu_mesh(point_array&& verts,
+			uv_array&& uvs,
+			face_array&& faces):
+			m_verts{std::move(verts)},
+			m_uvs{std::move(uvs)},
+			m_faces{std::move(faces)}
+		{
+			if(std::size(m_verts) != std::size(m_uvs))
+			{ throw std::runtime_error{"Mismatch between vertex count and uv point count"}; }
+			
+			if(std::size(m_faces) % 3 != 0)
+			{ throw std::runtime_error{"Bad number of vertex indices"}; }
+		}		
+	
+		constexpr auto const& vertices() const
+		{ return m_verts; }
+		
+		constexpr auto const& uvs() const
+		{ return m_uvs; }
+		
+		constexpr auto const& faces() const
+		{ return m_faces; }
+
+	private:
+		VertexBufferType<point> m_verts;
+		VertexBufferType<uv_coords> m_uvs;
+		IndexBufferType m_faces;
 	};
 }
 
