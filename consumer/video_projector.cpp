@@ -5,6 +5,7 @@
 #include "./gl_mesh.hpp"
 #include "./gl_shader.hpp"
 #include "./gl_texture.hpp"
+#include "./gl_video_port.hpp"
 
 #include <GL/gl.h>
 
