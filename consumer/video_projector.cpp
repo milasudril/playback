@@ -74,7 +74,7 @@ constexpr std::array<unsigned int, 6> faces{
 int main()
 {
 	auto& ctxt = playback::glfw_context::get();
-	playback::gl_viewport viewport{ctxt, 1600, 1000, "video projector"};
+	playback::gl_viewport viewport{ctxt, 800, 500, "video projector"};
 	event_handler eh;
 	viewport.set_event_handler(eh);
 	viewport.activate_gl_context();
@@ -88,24 +88,14 @@ int main()
 	playback::gl_shader<GL_FRAGMENT_SHADER> frag_shader{frag_shader_src};
 	playback::gl_program prog{vertex_shader, frag_shader};
 	prog.bind();
-
-	playback::gl_vertex_buffer vbo{vertices};
-	playback::gl_vertex_buffer uv_buff{uvs};
-	playback::gl_index_buffer ibo{faces};
 	
-	playback::gl_mesh mesh{std::move(vbo), std::move(uv_buff), std::move(ibo)};
-	mesh.bind();
+	playback::gl_video_port video_port{};
+	video_port.bind();
 
-	auto const test_pattern =
-		playback::load_binary<pixel_store::rgba_value<>>("/usr/share/test_pattern/test_pattern.rgba");
-	playback::gl_texture texture;
-	texture.upload(pixel_store::image_span{std::data(test_pattern), 1600, 1000}, 10);
-	texture.bind(GL_TEXTURE0);
-
-	ctxt.read_events([](auto& viewport, auto& eh, size_t vertex_count){
+	ctxt.read_events([](auto& viewport, auto& eh){
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-		glDrawElements(GL_TRIANGLES, vertex_count, playback::gl_bindings::vertex_index_type(), nullptr);
+		glDrawElements(GL_TRIANGLES, 6, playback::gl_bindings::vertex_index_type(), nullptr);
 		viewport.swap_buffer();
 		return eh.should_exit();
-	}, viewport, std::as_const(eh), std::size(ibo));
+	}, viewport, std::as_const(eh));
 }
