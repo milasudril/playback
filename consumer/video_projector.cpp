@@ -71,27 +71,6 @@ constexpr std::array<unsigned int, 6> faces{
 	3, 2, 1
 };
 
-template<class T>
-requires(std::is_trivial_v<T>)
-auto load_binary(std::filesystem::path const& path)
-{
-	std::vector<T> data;
-	std::unique_ptr<FILE, decltype(&fclose)> file{fopen(path.c_str(), "rb"), fclose};
-	if(file == nullptr)
-	{ throw std::runtime_error{"Failed to open input file"}; }
-
-	std::array<T, 4096> buffer;
-
-	while(true)
-	{
-		auto const n = fread(std::data(buffer), sizeof(T), std::size(buffer), file.get());
-		if(n == 0)
-		{ return data; }
-		std::copy_n(std::begin(buffer), n, std::back_inserter(data));
-	}
-
-}
-
 int main()
 {
 	auto& ctxt = playback::glfw_context::get();
@@ -118,7 +97,7 @@ int main()
 	mesh.bind();
 
 	auto const test_pattern =
-		load_binary<pixel_store::rgba_value<>>("/usr/share/test_pattern/test_pattern.rgba");
+		playback::load_binary<pixel_store::rgba_value<>>("/usr/share/test_pattern/test_pattern.rgba");
 	playback::gl_texture texture;
 	texture.upload(pixel_store::image_span{std::data(test_pattern), 1600, 1000}, 10);
 	texture.bind(GL_TEXTURE0);
