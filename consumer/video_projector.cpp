@@ -51,20 +51,11 @@ void main()
 	FragColor = texture(diffuse, tex_coord);
 })";
 
-struct vec3
-{
-	using value_type = float;
-
-	value_type x;
-	value_type y;
-	value_type z;
-};
-
-constexpr std::array<vec3, 4> vertices{
-	vec3{ 0.5f,  0.5f, 0.0f},  // top right
-	vec3{ 0.5f, -0.5f, 0.0f},  // bottom right
-	vec3{-0.5f, -0.5f, 0.0f},  // bottom left
-	vec3{-0.5f,  0.5f, 0.0f}   // top left
+constexpr std::array<playback::point, 4> vertices{
+	playback::point{ 0.5f,  0.5f, 0.0f},  // top right
+	playback::point{ 0.5f, -0.5f, 0.0f},  // bottom right
+	playback::point{-0.5f, -0.5f, 0.0f},  // bottom left
+	playback::point{-0.5f,  0.5f, 0.0f}   // top left
 };
 
 constexpr std::array<playback::uv_coords, 4> uvs{

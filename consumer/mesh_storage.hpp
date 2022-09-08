@@ -1,5 +1,5 @@
-#ifndef PLAYBACK_CPUMESH_HPP
-#define PLAYBACK_CPUMESH_HPP
+#ifndef PLAYBACK_MESHSTORAGE_HPP
+#define PLAYBACK_MESHSTORAGE_HPP
 
 namespace playback
 {
@@ -15,7 +15,7 @@ namespace playback
 	class point
 	{
 	public:
-		using value_type = vec4_t;
+		using value_type = float;
 		
 		constexpr point() = default; // so we can load from file and set w afterwards
 		
@@ -38,14 +38,14 @@ namespace playback
 	}
 	
 	template<template<class> class VertexBufferType, class IndexBufferType>
-	class cpu_mesh
+	class mesh
 	{
 	public:
 		using point_array = VertexBufferType<point>;
 		using uv_array = VertexBufferType<uv_coords>;
 		using face_array = IndexBufferType;
 
-		constexpr explicit cpu_mesh(point_array&& verts,
+		constexpr explicit mesh(point_array&& verts,
 			uv_array&& uvs,
 			face_array&& faces):
 			m_verts{std::move(verts)},
@@ -69,9 +69,9 @@ namespace playback
 		{ return m_faces; }
 
 	private:
-		VertexBufferType<point> m_verts;
-		VertexBufferType<uv_coords> m_uvs;
-		IndexBufferType m_faces;
+		point_array m_verts;
+		uv_array m_uvs;
+		face_array m_faces;
 	};
 }
 

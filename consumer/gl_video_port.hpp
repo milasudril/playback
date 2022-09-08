@@ -2,7 +2,6 @@
 #define PLAYBACK_GLVIDEOPORT_HPP
 
 #include "./gl_mesh.hpp"
-#include "./cpu_mesh.hpp"
 #include "./gl_texture.hpp"
 
 namespace playback
