@@ -15,7 +15,22 @@ namespace playback
 		public:
 			static constexpr auto vertex_shader_port = 0;
 			static constexpr auto uv_shader_port = 1;
+
+			template<class T>
+			requires(!std::is_same_v<std::decay_t<T>, gl_mesh>)
+			explicit gl_mesh(T&& mesh):
+				gl_mesh{mesh.vertices(), mesh.uvs(), mesh.faces()}
+			{}
 			
+			template<class PointArray, class UvArray, class FaceArray>
+			explicit gl_mesh(PointArray&& verts, UvArray&& uvs, FaceArray&& faces):
+				gl_mesh{
+					gl_vertex_buffer{std::forward<PointArray>(verts)},
+					gl_vertex_buffer{std::forward<UvArray>(uvs)},
+					gl_index_buffer{std::forward<FaceArray>(faces)}
+				}
+			{}
+
 			explicit gl_mesh(gl_vertex_buffer<point>&& verts,
 				gl_vertex_buffer<uv_coords>&& uvs,
 				gl_index_buffer<IndexType>&& faces):

@@ -35,6 +35,8 @@ namespace playback
 	public:
 		static constexpr auto default_mesh = image_plane;
 		
+		gl_video_port():m_canvas{default_mesh}{}
+		
 	private:
 		gl_mesh<unsigned int> m_canvas;
 		gl_texture m_paint;
