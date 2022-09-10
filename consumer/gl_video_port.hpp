@@ -47,7 +47,7 @@ namespace playback
 		auto const& get_texture_descriptor() const
 		{ return m_paint.descriptor(); }
 		
-		void bind()
+		void bind() const
 		{
 			m_canvas.bind();
 			m_paint.bind(GL_TEXTURE0);

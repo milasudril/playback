@@ -41,7 +41,7 @@ namespace playback
 				m_vao.set_buffer(m_mesh.faces());
 			}
 			
-			void bind()
+			void bind() const
 			{ m_vao.bind(); }
 
 		private:

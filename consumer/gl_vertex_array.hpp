@@ -55,7 +55,7 @@ namespace playback
 			m_index_type = to_gl_type_id_v<T>;
 		}
 
-		void bind()
+		void bind() const
 		{
 			glBindVertexArray(m_handle.get());
 			s_bound_index_type = m_index_type;

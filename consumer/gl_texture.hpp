@@ -117,7 +117,7 @@ namespace playback
 		void set_parameter(GLenum name, float value)
 		{ glTextureParameterf(m_handle.get(), name, value); }
 
-		void bind(GLenum texture_unit)
+		void bind(GLenum texture_unit) const
 		{
 			glActiveTexture(texture_unit);
 			glBindTexture(GL_TEXTURE_2D, m_handle.get());
