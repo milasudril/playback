@@ -60,6 +60,12 @@ namespace playback
 	{
 	public:
 		explicit gl_texture():m_descriptor{0, 0, 0, 0, 0}{}
+		
+		explicit gl_texture(gl_texture_descriptor const& descriptor):gl_texture{}
+		{
+			set_format(descriptor);
+		}
+		
 
 		void upload(std::span<std::byte const> data, gl_texture_descriptor const& descriptor)
 		{

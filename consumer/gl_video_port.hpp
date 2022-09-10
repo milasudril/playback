@@ -37,6 +37,11 @@ namespace playback
 	public:
 		static constexpr auto default_mesh = image_plane;
 		
+		explicit gl_video_port(gl_texture_descriptor const& descriptor):
+		m_canvas{default_mesh},
+		m_paint{descriptor}
+		{}		
+		
 		gl_video_port():m_canvas{default_mesh}
 		{
 			auto const test_pattern =
