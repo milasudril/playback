@@ -1,4 +1,4 @@
-#ifndef PLAYBACK_DEVICE_HPP
+# ifndef PLAYBACK_DEVICE_HPP
 #define PLAYBACK_DEVICE_HPP
 
 #include "messages.hpp"

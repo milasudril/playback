@@ -1,11 +1,8 @@
 //@	{"target":{"name":"video_projector.o", "dependencies":[{"ref": "GL", "origin":"system", "rel":"external"}]}}
 
 #include "./dispatcher.hpp"
-#include "./gl_viewport.hpp"
-#include "./gl_mesh.hpp"
+#include "./gl_video_device.hpp"
 #include "./gl_shader.hpp"
-#include "./gl_texture.hpp"
-#include "./gl_video_port.hpp"
 
 #include <GL/gl.h>
 
