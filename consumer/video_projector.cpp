@@ -49,13 +49,14 @@ constexpr const char* vertex_shader_src = R"(#version 450 core
 layout (location = 0) in vec4 input_point;
 layout (location = 1) in vec2 uv;
 layout (location = 1) uniform vec2 window_scale;
+layout (location = 3) uniform vec3 model_scale;
 out vec2 tex_coord;
 
 vec4 origin = vec4(0, 0, 0, 1);
 
 void main()
 {
-	vec4 scale = vec4(window_scale, 1, 0);
+	vec4 scale = vec4(window_scale, 1, 0)  * vec4(model_scale, 0);
 	gl_Position = scale * (input_point - origin) + origin;
 	tex_coord = uv;
 })";

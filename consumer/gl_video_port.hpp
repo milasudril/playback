@@ -43,15 +43,17 @@ namespace playback
 				playback::load_binary<pixel_store::rgba_value<>>("/usr/share/test_pattern/test_pattern.rgba");
 			m_paint.upload(pixel_store::image_span{std::data(test_pattern), 1600, 1000}, 10);
 		}
+
+		auto const& get_texture_descriptor() const
+		{ return m_paint.descriptor(); }
 		
 		void bind()
 		{
 			m_canvas.bind();
 			m_paint.bind(GL_TEXTURE0);
-		}
-		
-		auto const& get_texture_descriptor() const
-		{ return m_paint.descriptor(); }
+			auto const scale = aspect_ratio(get_texture_descriptor());
+			glUniform3f(3, scale, 1.0f, 1.0f);
+		}		
 		
 	private:
 		gl_mesh<unsigned int> m_canvas;
