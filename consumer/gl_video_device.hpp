@@ -24,15 +24,16 @@ namespace playback
 		void configure_port(size_t index, video_port_config const&)
 		{
 			 if(index >= std::size(m_video_ports)) [[unlikely]]
-			 { m_video_ports.resize(index); }
+			 { m_video_ports.resize(index + 1); }
 			 
 			 m_video_ports[index] = gl_video_port{};
 		}
 		
-		void render_ports() const
+		void show_content() const
 		{
 			std::ranges::for_each(m_video_ports, [](auto const& item) {
 				item.bind();
+				// FIXME: The number of elements should be infered from item
 				glDrawElements(GL_TRIANGLES, 6, playback::gl_bindings::vertex_index_type(), nullptr);
 			});
 		}

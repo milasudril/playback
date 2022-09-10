@@ -107,12 +107,15 @@ int main()
 	prog.bind();
 	eh.framebuffer_size_changed(800, 500);
 	
-	playback::gl_video_port video_port{};
-	video_port.bind();
+	video_out.configure_port(0, playback::video_port_config{});
+	
+//	playback::gl_video_port video_port{};
+//	video_port.bind();
 
 	ctxt.read_events([](auto& video_out, auto& eh){
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-		glDrawElements(GL_TRIANGLES, 6, playback::gl_bindings::vertex_index_type(), nullptr);
+//		glDrawElements(GL_TRIANGLES, 6, playback::gl_bindings::vertex_index_type(), nullptr);
+		video_out.show_content();
 		video_out.swap_buffer();
 		return eh.should_exit();
 	}, video_out, std::as_const(eh));
