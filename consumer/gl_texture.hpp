@@ -30,6 +30,11 @@ namespace playback
 
 		auto operator<=>(gl_texture_descriptor const& other) const = default;
 	};
+	
+	inline float aspect_ratio(gl_texture_descriptor const& descriptor)
+	{
+		return static_cast<float>(descriptor.width)/static_cast<float>(descriptor.height);
+	}
 
 	template<class T>
 	struct to_gl_color_channel_layout;
@@ -107,16 +112,19 @@ namespace playback
 		}
 
 		void set_parameter(GLenum name, GLint value)
-		{glTextureParameteri(m_handle.get(), name, value);}
+		{ glTextureParameteri(m_handle.get(), name, value); }
 
 		void set_parameter(GLenum name, float value)
-		{glTextureParameterf(m_handle.get(), name, value);}
+		{ glTextureParameterf(m_handle.get(), name, value); }
 
 		void bind(GLenum texture_unit)
 		{
 			glActiveTexture(texture_unit);
 			glBindTexture(GL_TEXTURE_2D, m_handle.get());
 		}
+
+		auto const& descriptor() const
+		{ return m_descriptor; }
 
 	private:
 		void upload_impl(std::span<std::byte const> data)

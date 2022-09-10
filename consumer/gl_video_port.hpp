@@ -50,10 +50,18 @@ namespace playback
 			m_paint.bind(GL_TEXTURE0);
 		}
 		
+		auto const& get_texture_descriptor() const
+		{ return m_paint.descriptor(); }
+		
 	private:
 		gl_mesh<unsigned int> m_canvas;
 		gl_texture m_paint;
 	};
+	
+	inline auto aspect_ratio(gl_video_port const& video_port)
+	{
+		return aspect_ratio(video_port.get_texture_descriptor());
+	}
 }
 
 #endif
