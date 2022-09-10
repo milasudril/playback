@@ -91,10 +91,10 @@ constexpr std::array<unsigned int, 6> faces{
 int main()
 {
 	auto& ctxt = playback::glfw_context::get();
-	playback::gl_viewport viewport{ctxt, 800, 500, "video projector"};
+	playback::gl_video_device video_out{ctxt, 800, 500};
 	event_handler eh;
-	viewport.set_event_handler(eh);
-	viewport.activate_gl_context();
+	video_out.set_event_handler(eh);
+	video_out.activate_gl_context();
 
 	fprintf(stderr, "(i) Initialized OpenGL reporting version %s\n", glGetString(GL_VERSION));
 
@@ -110,10 +110,10 @@ int main()
 	playback::gl_video_port video_port{};
 	video_port.bind();
 
-	ctxt.read_events([](auto& viewport, auto& eh){
+	ctxt.read_events([](auto& video_out, auto& eh){
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 		glDrawElements(GL_TRIANGLES, 6, playback::gl_bindings::vertex_index_type(), nullptr);
-		viewport.swap_buffer();
+		video_out.swap_buffer();
 		return eh.should_exit();
-	}, viewport, std::as_const(eh));
+	}, video_out, std::as_const(eh));
 }
