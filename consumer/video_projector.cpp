@@ -25,7 +25,19 @@ namespace
 		void window_is_closing() { m_should_exit = true; }
 		
 		void framebuffer_size_changed(int w, int h)
-		{ glViewport(0,0, w, h); }
+		{
+			glViewport(0,0, w, h);
+			if( w > h)
+			{
+				auto const ratio = static_cast<float>(h)/static_cast<float>(w);
+				glUniform2f(1, ratio, 1.0f);
+			} 
+			else
+			{
+				auto const ratio = static_cast<float>(w) / static_cast<float>(h);
+				glUniform2f(1, 1.0f, ratio);				
+			}
+		}
 
 	private:
 		bool m_should_exit;
@@ -36,11 +48,15 @@ constexpr const char* vertex_shader_src = R"(#version 450 core
 
 layout (location = 0) in vec4 input_point;
 layout (location = 1) in vec2 uv;
+layout (location = 1) uniform vec2 window_scale;
 out vec2 tex_coord;
+
+vec4 origin = vec4(0, 0, 0, 1);
 
 void main()
 {
-	gl_Position = input_point;
+	vec4 scale = vec4(window_scale, 1, 0);
+	gl_Position = scale * (input_point - origin) + origin;
 	tex_coord = uv;
 })";
 
@@ -91,6 +107,7 @@ int main()
 	playback::gl_shader<GL_FRAGMENT_SHADER> frag_shader{frag_shader_src};
 	playback::gl_program prog{vertex_shader, frag_shader};
 	prog.bind();
+	eh.framebuffer_size_changed(800, 500);
 	
 	playback::gl_video_port video_port{};
 	video_port.bind();
