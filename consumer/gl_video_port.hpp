@@ -53,7 +53,10 @@ namespace playback
 			m_paint.bind(GL_TEXTURE0);
 			auto const scale = aspect_ratio(get_texture_descriptor());
 			glUniform3f(3, scale, 1.0f, 1.0f);
-		}		
+		}
+		
+		size_t get_index_count() const
+		{ return m_canvas.get_index_count(); }
 		
 	private:
 		gl_mesh<unsigned int> m_canvas;

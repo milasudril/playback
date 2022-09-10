@@ -43,6 +43,10 @@ namespace playback
 			
 			void bind() const
 			{ m_vao.bind(); }
+			
+			size_t get_index_count() const
+			{ return std::size(m_mesh.faces()); }
+			
 
 		private:
 			mesh<gl_vertex_buffer, gl_index_buffer<IndexType>> m_mesh;

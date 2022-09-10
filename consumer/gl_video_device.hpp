@@ -33,8 +33,7 @@ namespace playback
 		{
 			std::ranges::for_each(m_video_ports, [](auto const& item) {
 				item.bind();
-				// FIXME: The number of elements should be infered from item
-				glDrawElements(GL_TRIANGLES, 6, playback::gl_bindings::vertex_index_type(), nullptr);
+				glDrawElements(GL_TRIANGLES, item.get_index_count(), playback::gl_bindings::vertex_index_type(), nullptr);
 			});
 		}
 
