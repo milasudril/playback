@@ -8,7 +8,7 @@ namespace
 {
 	struct dummy_device:public playback::device
 	{
-		void process(playback::video_frame_update const& msg, std::span<std::byte> buff) override
+		void process(playback::video_frame_update const& msg, std::span<std::byte const> buff) override
 		{
 			video_frame_update = msg;
 			payload = buff;
@@ -16,7 +16,7 @@ namespace
 
 		void process(playback::stream_config const&) override {abort();}
 
-		std::span<std::byte> payload{};
+		std::span<std::byte const> payload{};
 
 		playback::video_frame_update video_frame_update{};
 
