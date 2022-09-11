@@ -17,19 +17,19 @@ namespace playback
 
 		explicit nonblocking_fd_reader(int fd):
 			m_fd{fd},
-			m_old_flags{fcntl(fd, F_GETFD)}
+			m_old_flags{fcntl(fd, F_GETFL)}
 		{
-			auto res = fcntl(m_fd, F_SETFD, m_old_flags | O_NONBLOCK);
+			auto res = fcntl(m_fd, F_SETFL, m_old_flags | O_NONBLOCK);
 			if(res == -1)
 			{ throw std::runtime_error{strerror(errno)}; }
 		}
 
 		~nonblocking_fd_reader()
 		{
-			fcntl(m_fd, F_SETFD, m_old_flags);
+			fcntl(m_fd, F_SETFL, m_old_flags);
 		}
 
-		int read(std::span<std::byte> buffer)
+		int read(std::span<std::byte> buffer) const
 		{
 			return ::read(m_fd, std::data(buffer), std::size(buffer));
 		}

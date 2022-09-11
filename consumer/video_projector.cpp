@@ -109,7 +109,6 @@ int main()
 	prog.bind();
 	eh.framebuffer_size_changed(800, 500);
 
-	playback::nonblocking_fd_reader reader{STDIN_FILENO};
 
 	video_out.configure_port(0, playback::video_port_config{
 		.width = 1600,
@@ -123,7 +122,18 @@ int main()
 
 	video_out.set_pixels(0, playback::load_binary<std::byte>("/usr/share/test_pattern/test_pattern.rgba"));
 
-	ctxt.read_events([](auto& video_out, auto& eh){
+
+	ctxt.read_events([reader = playback::nonblocking_fd_reader{STDIN_FILENO}](auto& video_out, auto& eh){
+		std::array<std::byte, 65536> buffer;
+		auto res = reader.read(buffer);
+		if(res == 0)
+		{ return true; }
+
+		if(res != -1)
+		{
+			printf("Data to process\n");
+		}
+
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 		video_out.render_content();
 		video_out.swap_buffer();
