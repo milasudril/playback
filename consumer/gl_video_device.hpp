@@ -29,6 +29,15 @@ namespace playback
 			 m_video_ports[index] = gl_video_port{cfg};
 		}
 
+		void configure(std::span<video_port_config const> video_ports)
+		{
+			m_video_ports.clear();
+			std::ranges::transform(video_ports, std::back_inserter(m_video_ports),
+				[](auto const& cfg){
+					return gl_video_port(cfg);
+			});
+		}
+
 		void set_pixels(size_t index, std::span<std::byte const> data)
 		{
 			if(index >= std::size(m_video_ports)) [[unlikely]]
