@@ -3,6 +3,7 @@
 #include "./dispatcher.hpp"
 #include "./gl_video_device.hpp"
 #include "./gl_shader.hpp"
+#include "io_utils.hpp"
 
 #include <GL/gl.h>
 
@@ -114,7 +115,7 @@ int main()
 		.sample_type = playback::sample_type::f32,
 		.intensity_transfer_function = playback::intensity_transfer_function::linear,
 		.alpha_mode = playback::alpha_mode::premultiplied,
-		.num_mipmaps = 10
+		.num_mipmaps = 0
 	});
 
 	video_out.set_pixels(0, playback::load_binary<std::byte>("/usr/share/test_pattern/test_pattern.rgba"));

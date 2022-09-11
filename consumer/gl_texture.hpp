@@ -110,19 +110,17 @@ namespace playback
 			GLuint handle;
 			glCreateTextures(GL_TEXTURE_2D, 1, &handle);
 			glTextureStorage2D(handle,
-				descriptor.num_mipmaps,
+				descriptor.num_mipmaps + 1,
 				gl_make_sized_format(descriptor.format, descriptor.type),
 				descriptor.width,
 				descriptor.height);
+
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, descriptor.num_mipmaps != 0 ?
+				GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			m_handle.reset(handle);
 			m_descriptor = descriptor;
 		}
-
-		void set_parameter(GLenum name, GLint value)
-		{ glTextureParameteri(m_handle.get(), name, value); }
-
-		void set_parameter(GLenum name, float value)
-		{ glTextureParameterf(m_handle.get(), name, value); }
 
 		void bind(GLenum texture_unit) const
 		{
