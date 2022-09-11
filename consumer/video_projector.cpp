@@ -4,7 +4,7 @@
 #include "./gl_video_device.hpp"
 #include "./gl_shader.hpp"
 #include "io_utils.hpp"
-#include "./nonblocking_fd_reader.hpp"
+#include "./nonblocking_fd.hpp"
 
 #include <GL/gl.h>
 
@@ -124,26 +124,9 @@ int main()
 	video_out.set_pixels(0, playback::load_binary<std::byte>("/usr/share/test_pattern/test_pattern.rgba"));
 
 
-	ctxt.read_events([reader = playback::nonblocking_fd_reader{STDIN_FILENO},
+	ctxt.read_events([reader = playback::nonblocking_fd{STDIN_FILENO},
 		parse_ctxt = anon::create_parser_context()
 	](auto& video_out, auto& eh){
-		std::array<std::byte, 65536> buffer;
-		{
-			auto res = reader.read(buffer);
-			if(res == 0)
-			{ return true; }
-
-			if(res != -1)
-			{
-				auto ptr = std::begin(buffer);
-				while(ptr != std::end(buffer))
-				{
-					(void)anon::update(static_cast<char>(*ptr), *parse_ctxt);
-					++ptr;
-				}
-			}
-		}
-
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 		video_out.render_content();
 		video_out.swap_buffer();
