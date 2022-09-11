@@ -49,6 +49,8 @@ namespace playback
 
 	GLenum gl_make_sized_format(GLenum format, GLenum type);
 
+	size_t gl_get_sample_size(GLenum type);
+
 	size_t gl_get_pixel_size(GLenum format, GLenum type);
 
 	inline auto get_image_size(gl_texture_descriptor const& descriptor)
