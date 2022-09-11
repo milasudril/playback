@@ -76,6 +76,7 @@ namespace playback
 		enum sample_type sample_type;
 		enum intensity_transfer_function intensity_transfer_function;
 		enum alpha_mode alpha_mode;
+		uint32_t num_mipmaps;
 	};
 
 	inline size_t get_pixel_count(video_port_config const& cfg)

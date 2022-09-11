@@ -113,7 +113,8 @@ int main()
 		.channel_layout = playback::video_channel_layout::rgba,
 		.sample_type = playback::sample_type::f32,
 		.intensity_transfer_function = playback::intensity_transfer_function::linear,
-		.alpha_mode = playback::alpha_mode::premultiplied
+		.alpha_mode = playback::alpha_mode::premultiplied,
+		.num_mipmaps = 10
 	});
 
 

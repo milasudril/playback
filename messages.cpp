@@ -131,6 +131,7 @@ playback::video_port_config playback::deserialize(empty<video_port_config>, anon
 	ret.intensity_transfer_function = deserialize(empty<intensity_transfer_function>{},
 		std::get<std::string>(obj["intensity_transfer_function"]));
 	ret.alpha_mode = deserialize(empty<alpha_mode>{}, std::get<std::string>(obj["alpha_mode"]));
+	ret.num_mipmaps = std::get<uint32_t>(obj["num_mipmaps"]);
 
 	return ret;
 }
@@ -143,7 +144,8 @@ anon::object playback::serialize(video_port_config const& cfg)
 		.insert_or_assign("sample_type", to_string(cfg.sample_type))
 		.insert_or_assign("channel_layout", to_string(cfg.channel_layout))
 		.insert_or_assign("intensity_transfer_function", to_string(cfg.intensity_transfer_function))
-		.insert_or_assign("alpha_mode", to_string(cfg.alpha_mode));
+		.insert_or_assign("alpha_mode", to_string(cfg.alpha_mode))
+		.insert_or_assign("num_mipmaps", cfg.num_mipmaps);
 }
 
 playback::stream_config playback::deserialize(empty<stream_config>, anon::object const& obj)

@@ -35,8 +35,6 @@ namespace playback
 
 	constexpr auto make_gl_format(video_channel_layout channel_layout)
 	{
-		// 	enum class video_channel_layout:int{y, ya, rgb, rgba};
-
 		switch(channel_layout)
 		{
 			case video_channel_layout::y:
@@ -76,6 +74,7 @@ namespace playback
 		ret.height = cfg.height;
 		ret.format = make_gl_format(cfg.channel_layout);
 		ret.type = make_gl_type_id(cfg.sample_type);
+		ret.num_mipmaps = cfg.num_mipmaps;
 		return ret;
 	}
 
