@@ -107,7 +107,14 @@ int main()
 	prog.bind();
 	eh.framebuffer_size_changed(800, 500);
 
-	video_out.configure_port(0, playback::video_port_config{});
+	video_out.configure_port(0, playback::video_port_config{
+		.width = 800,
+		.height = 500,
+		.channel_layout = playback::video_channel_layout::rgba,
+		.sample_type = playback::sample_type::f32,
+		.intensity_transfer_function = playback::intensity_transfer_function::linear,
+		.alpha_mode = playback::alpha_mode::premultiplied
+	});
 
 
 	ctxt.read_events([](auto& video_out, auto& eh){

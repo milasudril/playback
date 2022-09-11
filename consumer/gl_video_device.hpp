@@ -21,12 +21,12 @@ namespace playback
 		using gl_viewport::activate_gl_context;
 		using gl_viewport::swap_buffer;
 
-		void configure_port(size_t index, video_port_config const&)
+		void configure_port(size_t index, video_port_config const& cfg)
 		{
 			 if(index >= std::size(m_video_ports)) [[unlikely]]
 			 { m_video_ports.resize(index + 1); }
 
-			 m_video_ports[index] = gl_video_port{};
+			 m_video_ports[index] = gl_video_port{cfg};
 		}
 
 		void render_content() const
