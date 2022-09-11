@@ -5,8 +5,6 @@
 #include "./gl_texture.hpp"
 #include "messages.hpp"
 
-#include "io_utils.hpp"
-
 namespace playback
 {
 	template<class T>
@@ -84,20 +82,17 @@ namespace playback
 		static constexpr auto default_mesh = image_plane;
 
 		explicit gl_video_port(gl_texture_descriptor const& descriptor):
-		m_canvas{default_mesh},
-		m_paint{descriptor}
+			m_canvas{default_mesh},
+			m_paint{descriptor}
 		{}
 
 		explicit gl_video_port(video_port_config const& cfg):
-		m_canvas{default_mesh},
-		m_paint{make_gl_texture_descriptor(cfg)}
+			m_canvas{default_mesh},
+			m_paint{make_gl_texture_descriptor(cfg)}
 		{}
 
 		gl_video_port():m_canvas{default_mesh}
 		{
-			auto const test_pattern =
-				playback::load_binary<pixel_store::rgba_value<>>("/usr/share/test_pattern/test_pattern.rgba");
-			m_paint.upload(pixel_store::image_span{std::data(test_pattern), 1600, 1000}, 10);
 		}
 
 		void upload_texture(std::span<std::byte const> data, gl_texture_descriptor const& descriptor)
