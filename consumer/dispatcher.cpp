@@ -4,12 +4,12 @@
 
 #include <anon/deserializer.hpp>
 
-void playback::dispatch(device& dev, anon::object const& message, std::span<std::byte> payload)
+void playback::dispatch(video_device& video_out, anon::object const& message, std::span<std::byte const> payload)
 {
 	auto const& message_type = std::get<std::string>(message["message_type"]);
 	if(message_type == "video_frame_update")
 	{
-		dev.process(deserialize(empty<video_frame_update>{},
+		video_out.process(deserialize(empty<video_frame_update>{},
 			std::get<anon::object>(message["content"])),
 			payload);
 	}
@@ -19,9 +19,12 @@ void playback::dispatch(device& dev, anon::object const& message, std::span<std:
 	}
 }
 
-void playback::dispatch(FILE* src, device& dev)
+void playback::dispatch(FILE* src, video_device& video_out)
 {
-	dev.process(deserialize(empty<stream_config>{}, anon::load(src)));
+	{
+		auto cfg = deserialize(empty<stream_config>{}, anon::load(src));
+		video_out.process(cfg.video_ports);
+	}
 
 	while(!feof(src))
 	{
@@ -35,11 +38,11 @@ void playback::dispatch(FILE* src, device& dev)
 				fprintf(stderr, "(!) Stream ended with a truncated messsage\n");
 				return;
 			}
-			dispatch(dev, message, std::span{buffer.get(), payload_size});
+			dispatch(video_out, message, std::span{buffer.get(), payload_size});
 		}
 		else
 		{
-			dispatch(dev, message, std::span<std::byte>{});
+			dispatch(video_out, message, std::span<std::byte>{});
 		}
 	}
 }

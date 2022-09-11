@@ -6,19 +6,20 @@
 
 namespace
 {
-	struct dummy_device:public playback::device
+	struct dummy_video_device
 	{
-		void process(playback::video_frame_update const& msg, std::span<std::byte const> buff) override
+		void process(playback::video_frame_update const& msg, std::span<std::byte const> buff)
 		{
-			video_frame_update = msg;
-			payload = buff;
+			video_frame_update.get() = msg;
+			payload.get() = buff;
 		}
 
-		void process(playback::stream_config const&) override {abort();}
+		template<class ... T>
+		void process(T const& ...) {abort();}
 
-		std::span<std::byte const> payload{};
 
-		playback::video_frame_update video_frame_update{};
+		std::reference_wrapper<std::span<std::byte const>> payload;
+		std::reference_wrapper<playback::video_frame_update> video_frame_update;
 
 	};
 }
@@ -34,10 +35,12 @@ TESTCASE(dispatch_video_frame_update)
 		.insert_or_assign("payload_size", std::size(payload))
 		.insert_or_assign("content", serialize(content));
 
-	dummy_device dev;
-	dispatch(dev, msg, payload);
+	std::span<std::byte const> payload_out;
+	playback::video_frame_update vfu_out;
 
-	EXPECT_EQ(dev.video_frame_update.video_port, content.video_port);
-	EXPECT_EQ(std::data(dev.payload), std::data(payload));
-	EXPECT_EQ(std::size(dev.payload), std::size(payload));
+	playback::dispatch(dummy_video_device{payload_out, vfu_out}, msg, payload);
+
+	EXPECT_EQ(vfu_out.video_port, content.video_port);
+	EXPECT_EQ(std::data(payload_out), std::data(payload));
+	EXPECT_EQ(std::size(payload_out), std::size(payload));
 }
