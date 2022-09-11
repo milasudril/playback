@@ -8,11 +8,6 @@
 
 #include <GL/gl.h>
 
-#include <filesystem>
-#include <concepts>
-#include <type_traits>
-#include <anon/deserializer.hpp>
-
 namespace
 {
 	class event_handler
@@ -72,25 +67,6 @@ void main()
 	FragColor = texture(diffuse, tex_coord);
 })";
 
-constexpr std::array<playback::point, 4> vertices{
-	playback::point{ 0.5f,  0.5f, 0.0f},  // top right
-	playback::point{ 0.5f, -0.5f, 0.0f},  // bottom right
-	playback::point{-0.5f, -0.5f, 0.0f},  // bottom left
-	playback::point{-0.5f,  0.5f, 0.0f}   // top left
-};
-
-constexpr std::array<playback::uv_coords, 4> uvs{
-	playback::uv_coords{ 1.0f,  0.0f},
-	playback::uv_coords{ 1.0f,  1.0f},
-	playback::uv_coords{ 0.0f,  1.0f},
-	playback::uv_coords{ 0.0f,  0.0f}
-};
-
-constexpr std::array<unsigned int, 6> faces{
-	0, 3, 1,
-	3, 2, 1
-};
-
 int main()
 {
 	auto& ctxt = playback::glfw_context::get();
@@ -124,9 +100,7 @@ int main()
 	video_out.set_pixels(0, playback::load_binary<std::byte>("/usr/share/test_pattern/test_pattern.rgba"));
 
 
-	ctxt.read_events([reader = playback::nonblocking_fd{STDIN_FILENO},
-		parse_ctxt = anon::create_parser_context()
-	](auto& video_out, auto& eh){
+	ctxt.read_events([reader = playback::nonblocking_fd{STDIN_FILENO}](auto& video_out, auto& eh){
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 		video_out.render_content();
 		video_out.swap_buffer();
