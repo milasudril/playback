@@ -29,6 +29,16 @@ namespace playback
 			 m_video_ports[index] = gl_video_port{cfg};
 		}
 
+		void set_pixels(size_t index, std::span<std::byte const> data)
+		{
+			if(index >= std::size(m_video_ports)) [[unlikely]]
+			{
+				fprintf(stderr, "(!) trying to upload pixles to non-existing video port\n");
+				return;
+			}
+			m_video_ports[index].upload_texture(data);
+		}
+
 		void render_content() const
 		{
 			std::ranges::for_each(m_video_ports, [](auto const& item) {

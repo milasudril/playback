@@ -30,7 +30,7 @@ namespace playback
 
 		auto operator<=>(gl_texture_descriptor const& other) const = default;
 	};
-	
+
 	inline float aspect_ratio(gl_texture_descriptor const& descriptor)
 	{
 		return static_cast<float>(descriptor.width)/static_cast<float>(descriptor.height);
@@ -60,12 +60,11 @@ namespace playback
 	{
 	public:
 		explicit gl_texture():m_descriptor{0, 0, 0, 0, 0}{}
-		
+
 		explicit gl_texture(gl_texture_descriptor const& descriptor):gl_texture{}
 		{
 			set_format(descriptor);
 		}
-		
 
 		void upload(std::span<std::byte const> data, gl_texture_descriptor const& descriptor)
 		{
@@ -93,6 +92,17 @@ namespace playback
 			upload(std::as_bytes(pixel_array), descriptor);
 		}
 
+		void upload(std::span<std::byte const> data)
+		{
+			auto const image_size = get_image_size(m_descriptor);
+			if(image_size != std::size(data)) [[unlikely]]
+			{
+				fprintf(stderr, "(!) Ignoring texture data of wrong size\n");
+				return;
+			}
+			upload_impl(data);
+		}
+
 		void set_format(gl_texture_descriptor const& descriptor)
 		{
 			GLuint handle;
@@ -104,17 +114,6 @@ namespace playback
 				descriptor.height);
 			m_handle.reset(handle);
 			m_descriptor = descriptor;
-		}
-
-		void upload(std::span<std::byte const> data)
-		{
-			auto const image_size = get_image_size(m_descriptor);
-			if(image_size != std::size(data)) [[unlikely]]
-			{
-				fprintf(stderr, "(!) Ignoring texture data of wrong size\n");
-				return;
-			}
-			upload_impl(data);
 		}
 
 		void set_parameter(GLenum name, GLint value)

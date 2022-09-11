@@ -100,6 +100,22 @@ namespace playback
 			m_paint.upload(pixel_store::image_span{std::data(test_pattern), 1600, 1000}, 10);
 		}
 
+		void upload_texture(std::span<std::byte const> data, gl_texture_descriptor const& descriptor)
+		{
+			m_paint.upload(data, descriptor);
+		}
+
+		template<class T>
+		void upload_texture(pixel_store::image_span<T const> pixels, GLsizei num_mipmaps)
+		{
+			m_paint.upload(pixels, num_mipmaps);
+		}
+
+		void upload_texture(std::span<std::byte const> data)
+		{
+			m_paint.upload(data);
+		}
+
 		auto const& get_texture_descriptor() const
 		{ return m_paint.descriptor(); }
 
