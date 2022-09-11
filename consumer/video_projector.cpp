@@ -20,7 +20,7 @@ namespace
 		bool should_exit() const { return m_should_exit; }
 
 		void window_is_closing() { m_should_exit = true; }
-		
+
 		void framebuffer_size_changed(int w, int h)
 		{
 			glViewport(0,0, w, h);
@@ -28,11 +28,11 @@ namespace
 			{
 				auto const ratio = static_cast<float>(h)/static_cast<float>(w);
 				glUniform2f(1, ratio, 1.0f);
-			} 
+			}
 			else
 			{
 				auto const ratio = static_cast<float>(w) / static_cast<float>(h);
-				glUniform2f(1, 1.0f, ratio);				
+				glUniform2f(1, 1.0f, ratio);
 			}
 		}
 
@@ -106,16 +106,13 @@ int main()
 	playback::gl_program prog{vertex_shader, frag_shader};
 	prog.bind();
 	eh.framebuffer_size_changed(800, 500);
-	
+
 	video_out.configure_port(0, playback::video_port_config{});
-	
-//	playback::gl_video_port video_port{};
-//	video_port.bind();
+
 
 	ctxt.read_events([](auto& video_out, auto& eh){
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-//		glDrawElements(GL_TRIANGLES, 6, playback::gl_bindings::vertex_index_type(), nullptr);
-		video_out.show_content();
+		video_out.render_content();
 		video_out.swap_buffer();
 		return eh.should_exit();
 	}, video_out, std::as_const(eh));
