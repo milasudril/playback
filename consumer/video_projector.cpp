@@ -4,6 +4,7 @@
 #include "./gl_video_device.hpp"
 #include "./gl_shader.hpp"
 #include "io_utils.hpp"
+#include "./nonblocking_fd_reader.hpp"
 
 #include <GL/gl.h>
 
@@ -107,6 +108,8 @@ int main()
 	playback::gl_program prog{vertex_shader, frag_shader};
 	prog.bind();
 	eh.framebuffer_size_changed(800, 500);
+
+	playback::nonblocking_fd_reader reader{STDIN_FILENO};
 
 	video_out.configure_port(0, playback::video_port_config{
 		.width = 1600,
