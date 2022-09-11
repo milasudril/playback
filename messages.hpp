@@ -72,8 +72,8 @@ namespace playback
 	{
 		uint32_t width;
 		uint32_t height;
-		enum sample_type sample_type;
 		video_channel_layout channel_layout;
+		enum sample_type sample_type;
 		enum intensity_transfer_function intensity_transfer_function;
 		enum alpha_mode alpha_mode;
 	};

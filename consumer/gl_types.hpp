@@ -25,10 +25,29 @@ namespace playback
 	};
 
 	template<>
+	struct to_gl_type_id<short>
+	{
+		static constexpr auto value = GL_SHORT;
+	};
+
+	template<>
 	struct to_gl_type_id<unsigned short>
 	{
 		static constexpr auto value = GL_UNSIGNED_SHORT;
 	};
+
+	template<>
+	struct to_gl_type_id<unsigned char>
+	{
+		static constexpr auto value = GL_UNSIGNED_BYTE;
+	};
+
+	template<>
+	struct to_gl_type_id<signed char>
+	{
+		static constexpr auto value = GL_BYTE;
+	};
+
 
 	template<class T>
 	constexpr auto to_gl_type_id_v = to_gl_type_id<T>::value;
