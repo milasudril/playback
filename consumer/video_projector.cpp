@@ -11,6 +11,7 @@
 #include "./gl_shader.hpp"
 #include "io_utils.hpp"
 #include "./nonblocking_fd.hpp"
+#include "./fd_reader.hpp"
 
 #include <anon/deserializer.hpp>
 
@@ -98,14 +99,18 @@ int main()
 	prog.bind();
 	eh.framebuffer_size_changed(800, 500);
 
-	auto const stream_cfg = deserialize(playback::empty<playback::stream_config>{},
-		load(anon::cfile_reader{stdin}));
-
+	playback::fd_reader reader{STDIN_FILENO};
+	auto const stream_cfg = deserialize(playback::empty<playback::stream_config>{}, anon::load(reader));
 	video_out.configure(stream_cfg.video_ports);
 
-	video_out.set_pixels(0, playback::load_binary<std::byte>("/usr/share/test_pattern/test_pattern.rgba"));
+	playback::nonblocking_fd unnblock_stdin{STDIN_FILENO};
 
-	ctxt.read_events([reader = playback::nonblocking_fd{STDIN_FILENO}](auto& video_out, auto& eh){
+	ctxt.read_events([anon_reader = anon::async_loader{reader}] (auto& video_out, auto& eh) mutable {
+		if(auto res = anon_reader.try_read_next<anon::object>(); res.has_value())
+		{
+			puts("Hej");
+		}
+
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 		video_out.render_content();
 		video_out.swap_buffer();

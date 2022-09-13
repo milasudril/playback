@@ -4,6 +4,7 @@
 #define PLAYBACK_FDREADER_HPP
 
 #include <sys/types.h>
+#include <anon/deserializer.hpp>
 
 #include <cstdint>
 #include <cstddef>
@@ -12,7 +13,7 @@
 
 namespace playback
 {
-	enum class read_status:uint8_t{success, eof, blocked};
+	using read_status = anon::stream_status;
 
 	struct read_byte_result
 	{
@@ -24,13 +25,13 @@ namespace playback
 	{
 		return read_byte_result{
 			.value = std::byte{0x0},
-			.status = val == 0 ? read_status::eof : read_status::blocked
+			.status = val == 0 ? read_status::eof : read_status::blocking
 		};
 	}
 
 	inline auto make_read_result(std::byte val)
 	{
-		return read_byte_result{.value = val, .status = read_status::success};
+		return read_byte_result{.value = val, .status = read_status::ready};
 	}
 
 
@@ -45,7 +46,7 @@ namespace playback
 	{
 		return read_data_result{
 			.bytes_to_read = bytes_to_read,
-			.status = val == 0 ? read_status::eof : read_status::blocked
+			.status = val == 0 ? read_status::eof : read_status::blocking
 		};
 	}
 
@@ -68,7 +69,7 @@ namespace playback
 		{
 			if(m_read_ptr == m_end_ptr) [[unlikely]]
 			{
-				if(auto const res = fetch(); res != read_status::success) [[unlikely]]
+				if(auto const res = fetch(); res != read_status::ready) [[unlikely]]
 				{
 					return read_byte_result{std::byte{0x00}, res};
 				}
@@ -76,7 +77,7 @@ namespace playback
 
 			auto ret = *m_read_ptr;
 			++m_read_ptr;
-			return read_byte_result{ret, read_status::success};
+			return read_byte_result{ret, read_status::ready};
 		}
 
 		read_data_result read_into(std::vector<std::byte>& buffer, size_t bytes_to_read);
@@ -89,6 +90,12 @@ namespace playback
 		std::byte const* m_read_ptr;
 		std::byte const* m_end_ptr;
 	};
+
+	inline auto read_byte(fd_reader& reader)
+	{
+		auto ret = reader.read_byte();
+		return anon::read_result{static_cast<char>(ret.value), ret.status};
+	}
 }
 
 #endif

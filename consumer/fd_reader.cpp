@@ -12,7 +12,7 @@ playback::read_data_result playback::fd_reader::read_into(std::vector<std::byte>
 	{
 		if(m_read_ptr == m_end_ptr)
 		{
-			if(auto const res = fetch(); res != read_status::success) [[unlikely]]
+			if(auto const res = fetch(); res != read_status::ready) [[unlikely]]
 			{ return read_data_result{bytes_to_read, res}; }
 		}
 
@@ -23,7 +23,7 @@ playback::read_data_result playback::fd_reader::read_into(std::vector<std::byte>
 		bytes_to_read -= n;
 	}
 
-	return read_data_result{0, read_status::success};
+	return read_data_result{0, read_status::ready};
 }
 
 playback::read_status playback::fd_reader::fetch()
@@ -35,11 +35,11 @@ playback::read_status playback::fd_reader::fetch()
 			return read_status::eof;
 
 		case -1:
-			return read_status::blocked;
+			return read_status::blocking;
 
 		default:
 			m_read_ptr = std::data(m_buffer);
 			m_end_ptr = m_read_ptr + res;
-			return read_status::success;
+			return read_status::ready;
 	}
 }
