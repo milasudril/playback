@@ -1,0 +1,11 @@
+obj{
+	video_ports:obj*{
+		width:u32{1600\}
+		height:u32{1000\}
+		channel_layout:str{rgba\}
+		intensity_transfer_function:str{linear\}
+		sample_type:str{f32\}
+		alpha_mode:str{premultiplied\}
+		num_mipmaps:u32{0\}\;
+	\}
+\}

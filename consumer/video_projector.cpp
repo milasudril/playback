@@ -1,10 +1,18 @@
-//@	{"target":{"name":"video_projector.o", "dependencies":[{"ref": "GL", "origin":"system", "rel":"external"}]}}
+//@	{
+//@		"target":{"name":"video_projector.o",
+//@		"dependencies":[
+//@			{"ref": "GL", "origin":"system", "rel":"external"},
+//@			{"ref": "anon", "origin":"system", "rel":"external"}
+//@		]}
+//@	}
 
 #include "./dispatcher.hpp"
 #include "./gl_video_device.hpp"
 #include "./gl_shader.hpp"
 #include "io_utils.hpp"
 #include "./nonblocking_fd.hpp"
+
+#include <anon/deserializer.hpp>
 
 #include <GL/gl.h>
 
@@ -67,6 +75,10 @@ void main()
 	FragColor = texture(diffuse, tex_coord);
 })";
 
+struct command_reader
+{
+};
+
 int main()
 {
 	auto& ctxt = playback::glfw_context::get();
@@ -86,19 +98,12 @@ int main()
 	prog.bind();
 	eh.framebuffer_size_changed(800, 500);
 
+	auto const stream_cfg = deserialize(playback::empty<playback::stream_config>{},
+		load(anon::cfile_reader{stdin}));
 
-	video_out.configure_port(0, playback::video_port_config{
-		.width = 1600,
-		.height = 1000,
-		.channel_layout = playback::video_channel_layout::rgba,
-		.sample_type = playback::sample_type::f32,
-		.intensity_transfer_function = playback::intensity_transfer_function::linear,
-		.alpha_mode = playback::alpha_mode::premultiplied,
-		.num_mipmaps = 0
-	});
+	video_out.configure(stream_cfg.video_ports);
 
 	video_out.set_pixels(0, playback::load_binary<std::byte>("/usr/share/test_pattern/test_pattern.rgba"));
-
 
 	ctxt.read_events([reader = playback::nonblocking_fd{STDIN_FILENO}](auto& video_out, auto& eh){
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
