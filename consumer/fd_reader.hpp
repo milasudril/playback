@@ -82,6 +82,13 @@ namespace playback
 
 		read_data_result read_into(std::vector<std::byte>& buffer, size_t bytes_to_read);
 
+		bool at_eof()
+		{
+			if(m_read_ptr != m_end_ptr)
+			{ return false; }
+			return fetch() == read_status::eof;
+		}
+
 	private:
 		read_status fetch();
 

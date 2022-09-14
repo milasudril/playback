@@ -106,9 +106,12 @@ int main()
 	playback::nonblocking_fd unnblock_stdin{STDIN_FILENO};
 
 	ctxt.read_events([anon_reader = anon::async_loader{reader}] (auto& video_out, auto& eh) mutable {
-		if(auto res = anon_reader.try_read_next<anon::object>(); res.has_value())
+		if(!anon_reader.source().at_eof())
 		{
-			puts("Hej");
+			if(auto res = anon_reader.try_read_next<anon::object>(); res.has_value())
+			{
+				puts("Hej");
+			}
 		}
 
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
