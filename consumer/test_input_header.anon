@@ -9,3 +9,10 @@ obj{
 		num_mipmaps:u32{0\}\;
 	\}
 \}
+obj{
+	message_type:str{video_frame_update\}
+	payload_size:u64{25600000\}
+	content:obj{
+		video_port:u32{0\}
+	\}
+\}
