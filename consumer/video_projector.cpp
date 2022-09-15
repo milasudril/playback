@@ -6,12 +6,13 @@
 //@		]}
 //@	}
 
-#include "./dispatcher.hpp"
 #include "./gl_video_device.hpp"
 #include "./gl_shader.hpp"
-#include "io_utils.hpp"
 #include "./nonblocking_fd.hpp"
 #include "./fd_reader.hpp"
+#include "./command_reader.hpp"
+
+#include "io_utils.hpp"
 
 #include <anon/deserializer.hpp>
 
@@ -100,16 +101,11 @@ int main()
 	video_out.configure(stream_cfg.video_ports);
 
 	playback::nonblocking_fd unnblock_stdin{STDIN_FILENO};
+	playback::message_dispatcher dispatcher{video_out};
 
-	ctxt.read_events([anon_reader = anon::async_loader{reader}] (auto& video_out, auto& eh) mutable {
-		if(!anon_reader.source().at_eof())
-		{
-			if(auto res = anon_reader.try_read_next<anon::object>(); res.has_value())
-			{
-				puts("Hej");
-			}
-		}
-
+	ctxt.read_events([cmd_reader = playback::command_reader{reader, dispatcher}]
+		(auto& video_out, auto& eh) mutable {
+		cmd_reader.read_and_dispatch();
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 		video_out.render_content();
 		video_out.swap_buffer();
