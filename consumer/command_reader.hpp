@@ -16,7 +16,7 @@ namespace playback
 	{
 	public:
 		explicit command_reader(fd_reader& reader,
-			message_dispatcher& dispatcher):
+			message_dispatcher dispatcher):
 			m_loader{reader},
 			m_dispatcher{dispatcher},
 			m_state{state::message}
@@ -27,7 +27,7 @@ namespace playback
 	private:
 		enum class state : int{message, payload};
 		anon::async_loader<fd_reader&> m_loader;
-		std::reference_wrapper<message_dispatcher> m_dispatcher;
+		message_dispatcher m_dispatcher;
 		state m_state;
 		std::string m_msg_type;
 		anon::object m_content;

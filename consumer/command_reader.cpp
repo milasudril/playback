@@ -24,7 +24,7 @@ void playback::command_reader::read_and_dispatch()
 				}
 				else
 				{
-					m_dispatcher.get().dispatch(
+					m_dispatcher.dispatch(
 						std::get<std::string>((*res)["message_type"]),
 						std::get<anon::object>((*res)["content"]),
 						std::span<std::byte>{});
@@ -41,7 +41,7 @@ void playback::command_reader::read_and_dispatch()
 				case read_status::eof:
 					if(res.bytes_to_read == 0)
 					{
-						m_dispatcher.get().dispatch(m_msg_type, m_content, m_buffer);
+						m_dispatcher.dispatch(m_msg_type, m_content, m_buffer);
 						m_state = state::message;
 						m_buffer.clear();
 					}

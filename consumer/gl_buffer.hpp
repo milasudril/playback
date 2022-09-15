@@ -6,6 +6,7 @@
 #include <memory>
 #include <type_traits>
 #include <array>
+#include <span>
 
 namespace playback
 {
@@ -29,7 +30,7 @@ namespace playback
 			glCreateBuffers(1, & buffer);
 			m_buffer.reset(buffer);
 		}
-		
+
 		template<size_t N>
 		explicit gl_vertex_buffer(std::array<T, N> const& data):gl_vertex_buffer{std::span{data}}{}
 
@@ -71,10 +72,10 @@ namespace playback
 
 		template<size_t N>
 		explicit gl_index_buffer(std::array<T, N> const& data):gl_index_buffer{std::span{data}}{}
-		
+
 		explicit gl_index_buffer(std::span<T const> data):gl_index_buffer()
 		{
-				upload(data); 
+				upload(data);
 		}
 
 		void upload(std::span<T const> data)
