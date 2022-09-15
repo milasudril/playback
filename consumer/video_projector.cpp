@@ -76,10 +76,6 @@ void main()
 	FragColor = texture(diffuse, tex_coord);
 })";
 
-struct command_reader
-{
-};
-
 int main()
 {
 	auto& ctxt = playback::glfw_context::get();
