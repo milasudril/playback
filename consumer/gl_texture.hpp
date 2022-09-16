@@ -45,6 +45,12 @@ namespace playback
 		static constexpr auto value = GL_RGBA;
 	};
 
+	GLenum gl_make_sized_format_red(GLenum type);
+
+	GLenum gl_make_sized_format_rg(GLenum type);
+
+	GLenum gl_make_sized_format_rgb(GLenum type);
+
 	GLenum gl_make_sized_format_rgba(GLenum type);
 
 	GLenum gl_make_sized_format(GLenum format, GLenum type);

@@ -6,7 +6,7 @@ obj{
 		intensity_transfer_function:str{linear\}
 		sample_type:str{f32\}
 		alpha_mode:str{premultiplied\}
-		num_mipmaps:u32{0\}\;
+		num_mipmaps:u32{10\}\;
 	\}
 \}
 obj{
