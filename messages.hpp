@@ -108,6 +108,7 @@ namespace playback
 
 	struct video_frame_update
 	{
+		static constexpr char const* message_type_id = "video_frame_update";
 		uint32_t video_port;
 	};
 
