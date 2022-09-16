@@ -1,0 +1,4 @@
+{
+	"target":{"name":"test_producer"},
+	"dependencies":[{"ref":"./test_producer.o", "rel":"implementation", "origin":"generated"}]
+}
