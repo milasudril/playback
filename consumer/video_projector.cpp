@@ -14,8 +14,6 @@
 
 #include "io_utils.hpp"
 
-#include <anon/deserializer.hpp>
-
 #include <GL/gl.h>
 
 namespace

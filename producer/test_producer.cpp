@@ -5,6 +5,8 @@
 #include "./message_writer.hpp"
 #include "io_utils.hpp"
 
+using vec4_t [[gnu::vector_size(16)]] = float;
+
 int main()
 {
 	playback::stream_config cfg;
@@ -19,16 +21,12 @@ int main()
 	});
 	write(cfg, stdout);
 
-	auto test_pattern = playback::load_binary<std::byte>("/usr/share/test_pattern/test_pattern.rgba");
-	write_message(playback::video_frame_update{0}, test_pattern, stdout);
-/*
- 	video_ports:obj*{
-		width:u32{1600\}
-		height:u32{1000\}
-		channel_layout:str{rgba\}
-		intensity_transfer_function:str{linear\}
-		sample_type:str{f32\}
-		alpha_mode:str{premultiplied\}
-		num_mipmaps:u32{10\}\;
-	\}*/
+	auto test_pattern = playback::load_binary<vec4_t>("/usr/share/test_pattern/test_pattern.rgba");
+	auto const test_pattern_span = std::span{test_pattern};
+
+	while(true)
+	{
+		write_message(playback::video_frame_update{0}, std::as_bytes(test_pattern_span), stdout);
+		std::rotate(std::begin(test_pattern), std::begin(test_pattern) + 10*1600, std::end(test_pattern));
+	}
 }

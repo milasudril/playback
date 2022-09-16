@@ -20,6 +20,7 @@ void playback::command_reader::read_and_dispatch()
 					m_msg_type = std::get<std::string>((*res)["message_type"]);
 					m_content = std::get<anon::object>((*res)["content"]);
 					m_bytes_to_read = std::get<uint64_t>(i->second);
+					m_buffer.reserve(m_bytes_to_read);
 					m_state = state::payload;
 				}
 				else
