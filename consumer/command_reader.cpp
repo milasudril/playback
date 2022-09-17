@@ -38,7 +38,7 @@ void playback::command_reader::read_and_dispatch()
 				}
 				else
 				{
-					m_dispatcher.dispatch(m_cmd);
+					m_dispatcher.enqueue(std::move(m_cmd));
 				}
 			}
 			break;
@@ -52,7 +52,7 @@ void playback::command_reader::read_and_dispatch()
 				case read_status::eof:
 					if(res.bytes_to_read == 0)
 					{
-						m_dispatcher.dispatch(m_cmd);
+						m_dispatcher.enqueue(std::move(m_cmd));
 						m_state = state::message;
 						m_cmd.payload.clear();
 					}

@@ -64,6 +64,7 @@ int main()
 	ctxt.read_events([cmd_reader = playback::command_reader{reader, dispatcher}]
 		(auto& video_out, auto& eh) mutable {
 		cmd_reader.read_and_dispatch();
+		cmd_reader.flush_expired_commands(std::chrono::steady_clock::now());
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 		video_out.render_content();
 		video_out.swap_buffer();

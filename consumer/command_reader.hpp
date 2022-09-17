@@ -24,6 +24,9 @@ namespace playback
 
 		void read_and_dispatch();
 
+		void flush_expired_commands(std::chrono::steady_clock::time_point now)
+		{ m_dispatcher.flush_expired_commands(now); }
+
 	private:
 		enum class state : int{message, payload};
 		anon::async_loader<fd_reader&> m_loader;
