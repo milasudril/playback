@@ -13,6 +13,7 @@
 #include "io_utils.hpp"
 
 #include <GL/gl.h>
+#include <thread>
 
 namespace
 {
@@ -61,10 +62,17 @@ int main()
 	playback::nonblocking_fd unnblock_stdin{STDIN_FILENO};
 	playback::message_dispatcher dispatcher{video_out};
 
-	ctxt.read_events([cmd_reader = playback::command_reader{reader, dispatcher}]
+	std::jthread reader_thread{[&reader, &dispatcher, &eh]() {
+		playback::command_reader cmd_reader{reader, dispatcher};
+		while(!eh.should_exit())
+		{
+			cmd_reader.read_and_dispatch();
+		}
+	}};
+
+	ctxt.read_events([&dispatcher]
 		(auto& video_out, auto& eh) mutable {
-		cmd_reader.read_and_dispatch();
-		cmd_reader.flush_expired_commands(std::chrono::steady_clock::now());
+		dispatcher.flush_expired_commands(std::chrono::steady_clock::now());
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 		video_out.render_content();
 		video_out.swap_buffer();
