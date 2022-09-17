@@ -1,4 +1,4 @@
-//@	{"dependencies_extra":[{"ref":"./command_reader.o", "rel":"implementation"}]}
+//@	{"dependencies_extra":[{"ref":"./message_reader.o", "rel":"implementation"}]}
 
 #ifndef PLAYBACK_COMMANDREADER_HPP
 #define PLAYBACK_COMMANDREADER_HPP
@@ -12,10 +12,10 @@
 
 namespace playback
 {
-	class command_reader
+	class message_reader
 	{
 	public:
-		explicit command_reader(fd_reader& reader,
+		explicit message_reader(fd_reader& reader,
 			message_dispatcher dispatcher):
 			m_loader{reader},
 			m_dispatcher{dispatcher},

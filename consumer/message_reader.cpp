@@ -1,6 +1,6 @@
-//@	{"target":{"name":"command_reader.o"}}
+//@	{"target":{"name":"message_reader.o"}}
 
-#include "./command_reader.hpp"
+#include "./message_reader.hpp"
 
 namespace
 {
@@ -12,7 +12,7 @@ namespace
 	}
 }
 
-void playback::command_reader::read_and_dispatch()
+void playback::message_reader::read_and_dispatch()
 {
 	auto& src = m_loader.source();
 
