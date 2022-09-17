@@ -20,16 +20,12 @@ namespace playback
 		m_video_out{video_out}
 		{}
 
-		void dispatch(std::string_view message_type,
-			anon::object const& content,
-			std::chrono::steady_clock::duration,
-			std::span<std::byte const> payload)
+		void dispatch(command const& cmd)
 		{
-			if(message_type == "video_frame_update")
+			if(cmd.message_type_name == "video_frame_update")
 			{
-				auto const vfu = deserialize(empty<video_frame_update>{}, content);
-				m_video_out.get().set_pixels(vfu.video_port, payload);
-			}
+				auto const vfu = deserialize(empty<video_frame_update>{}, cmd.content);
+				m_video_out.get().set_pixels(vfu.video_port, cmd.payload);			}
 		}
 
 	private:

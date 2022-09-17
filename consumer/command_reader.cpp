@@ -24,12 +24,13 @@ void playback::command_reader::read_and_dispatch()
 		case state::message:
 			if(auto const res = m_loader.try_read_next<anon::object>(); res.has_value())
 			{
+				m_cmd.message_type_name = std::get<std::string>((*res)["message_type_name"]);
+				m_cmd.delay = to_steady_clock_duration(std::get<double>((*res)["delay"]));
+				m_cmd.content = std::get<anon::object>((*res)["content"]);
+
 				if(auto const i = res->find("payload_size"); i != std::end(*res))
 				{
 					m_state = state::payload;
-					m_cmd.message_type_name = std::get<std::string>((*res)["message_type_name"]);
-					m_cmd.delay = to_steady_clock_duration(std::get<double>((*res)["delay"]));
-					m_cmd.content = std::get<anon::object>((*res)["content"]);
 
 					m_bytes_to_read = std::get<uint64_t>(i->second);
 					m_cmd.payload.reserve(m_bytes_to_read);
@@ -37,11 +38,7 @@ void playback::command_reader::read_and_dispatch()
 				}
 				else
 				{
-					m_dispatcher.dispatch(
-						std::get<std::string>((*res)["message_type_name"]),
-						std::get<anon::object>((*res)["content"]),
-						to_steady_clock_duration(std::get<double>((*res)["delay"])),
-						std::span<std::byte>{});
+					m_dispatcher.dispatch(m_cmd);
 				}
 			}
 			break;
@@ -55,7 +52,7 @@ void playback::command_reader::read_and_dispatch()
 				case read_status::eof:
 					if(res.bytes_to_read == 0)
 					{
-						m_dispatcher.dispatch(m_cmd.message_type_name,m_cmd.content, m_cmd.delay, m_cmd.payload);
+						m_dispatcher.dispatch(m_cmd);
 						m_state = state::message;
 						m_cmd.payload.clear();
 					}
