@@ -29,10 +29,8 @@ namespace playback
 		anon::async_loader<fd_reader&> m_loader;
 		message_dispatcher m_dispatcher;
 		state m_state;
-		std::string m_msg_type;
-		std::chrono::steady_clock::duration m_delay;
-		anon::object m_content;
-		std::vector<std::byte> m_buffer;
+
+		command m_cmd;
 		uint64_t m_bytes_to_read;
 	};
 }
