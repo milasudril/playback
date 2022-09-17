@@ -22,6 +22,7 @@ int main()
 		.num_mipmaps = 10
 	});
 	write(cfg, stdout);
+	fflush(stdout);
 
 	auto test_pattern = playback::load_binary<vec4_t>("/usr/share/test_pattern/test_pattern.rgba");
 	auto const test_pattern_span = std::span{test_pattern};
@@ -29,6 +30,7 @@ int main()
 	while(true)
 	{
 		write_message(playback::video_frame_update{0}, std::as_bytes(test_pattern_span), stdout);
+		fflush(stdout);
 		std::rotate(std::begin(test_pattern), std::begin(test_pattern) + 3200, std::end(test_pattern));
 	}
 }
