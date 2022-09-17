@@ -11,6 +11,8 @@ using vec4_t [[gnu::vector_size(16)]] = float;
 
 int main()
 {
+	setvbuf(stdout, nullptr, _IOFBF, 65536);
+
 	playback::stream_config cfg;
 	cfg.video_ports.push_back(playback::video_port_config{
 		.width = 1600,
