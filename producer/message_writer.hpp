@@ -29,7 +29,7 @@ namespace playback
 		FILE* stream)
 	{
 		store(anon::object{}
-			.insert_or_assign("message_type", T::message_type_id)
+			.insert_or_assign("message_type_name", T::message_type_name)
 			.insert_or_assign("payload_size", static_cast<uint64_t>(std::size(payload)))
 			.insert_or_assign("delay", delay.count())
 			.insert_or_assign("content", serialize(message)), stream);

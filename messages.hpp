@@ -9,6 +9,7 @@
 #include <array>
 #include <vector>
 #include <type_traits>
+#include <chrono>
 
 namespace playback
 {
@@ -108,13 +109,23 @@ namespace playback
 
 	struct video_frame_update
 	{
-		static constexpr char const* message_type_id = "video_frame_update";
+		static constexpr char const* message_type_name = "video_frame_update";
 		uint32_t video_port;
 	};
 
 	video_frame_update deserialize(empty<video_frame_update>, anon::object const&);
 
 	anon::object serialize(video_frame_update const&);
+
+
+
+	struct command
+	{
+		std::string message_type_name;
+		anon::object content;
+		std::chrono::steady_clock::duration delay;
+		std::vector<std::byte> payload;
+	};
 }
 
 #endif

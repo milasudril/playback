@@ -27,7 +27,7 @@ void playback::message_reader::read_and_dispatch()
 				if(auto const i = res->find("payload_size"); i != std::end(*res))
 				{
 					m_state = state::payload;
-					m_msg_type = std::get<std::string>((*res)["message_type"]);
+					m_msg_type = std::get<std::string>((*res)["message_type_name"]);
 					m_bytes_to_read = std::get<uint64_t>(i->second);
 					m_delay = to_steady_clock_duration(std::get<double>((*res)["delay"]));
 					m_content = std::get<anon::object>((*res)["content"]);
@@ -37,7 +37,7 @@ void playback::message_reader::read_and_dispatch()
 				else
 				{
 					m_dispatcher.dispatch(
-						std::get<std::string>((*res)["message_type"]),
+						std::get<std::string>((*res)["message_type_name"]),
 						std::get<anon::object>((*res)["content"]),
 						to_steady_clock_duration(std::get<double>((*res)["delay"])),
 						std::span<std::byte>{});
