@@ -33,7 +33,7 @@ int main()
 
 	while(true)
 	{
-		write_message(playback::video_frame_update{0},
+		write_command(playback::video_frame_update{0},
 			std::as_bytes(test_pattern_span),
 			delay,
 			stdout);

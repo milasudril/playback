@@ -23,7 +23,7 @@ namespace playback
 	}
 
 	template<class T>
-	void write_message(T const& message,
+	void write_command(T const& content,
 		std::span<std::byte const> payload,
 		std::chrono::duration<double> delay,
 		FILE* stream)
@@ -32,7 +32,7 @@ namespace playback
 			.insert_or_assign("message_type_name", T::message_type_name)
 			.insert_or_assign("payload_size", static_cast<uint64_t>(std::size(payload)))
 			.insert_or_assign("delay", delay.count())
-			.insert_or_assign("content", serialize(message)), stream);
+			.insert_or_assign("content", serialize(content)), stream);
 		write(payload, stream);
 	}
 }

@@ -8,7 +8,7 @@
 #include "./gl_video_device.hpp"
 #include "./nonblocking_fd.hpp"
 #include "./fd_reader.hpp"
-#include "./message_reader.hpp"
+#include "./command_reader.hpp"
 
 #include "io_utils.hpp"
 
@@ -61,7 +61,7 @@ int main()
 	playback::nonblocking_fd unnblock_stdin{STDIN_FILENO};
 	playback::message_dispatcher dispatcher{video_out};
 
-	ctxt.read_events([cmd_reader = playback::message_reader{reader, dispatcher}]
+	ctxt.read_events([cmd_reader = playback::command_reader{reader, dispatcher}]
 		(auto& video_out, auto& eh) mutable {
 		cmd_reader.read_and_dispatch();
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
