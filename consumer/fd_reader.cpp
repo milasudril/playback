@@ -19,7 +19,7 @@ playback::read_data_result playback::fd_reader::read_into(std::vector<std::byte>
 
 		auto const n = std::min(static_cast<size_t>(m_end_ptr - m_read_ptr),
 			bytes_to_read);
-		std::copy_n(m_read_ptr, n, std::back_inserter(buffer));
+		buffer.insert(std::end(buffer), m_read_ptr, m_read_ptr + n);
 		m_read_ptr += n;
 		bytes_to_read -= n;
 	}
