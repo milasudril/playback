@@ -74,6 +74,8 @@ namespace playback
 			{
 				throw std::runtime_error{"Failed to create a window"};
 			}
+			activate_gl_context();
+			fprintf(stderr, "(i) Initialized OpenGL reporting version %s\n", glGetString(GL_VERSION));
 		}
 
 		void activate_gl_context()
