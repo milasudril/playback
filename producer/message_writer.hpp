@@ -7,6 +7,7 @@
 
 #include <span>
 #include <cstdio>
+#include <chrono>
 
 namespace playback
 {
@@ -22,11 +23,15 @@ namespace playback
 	}
 
 	template<class T>
-	void write_message(T const& message, std::span<std::byte const> payload, FILE* stream)
+	void write_message(T const& message,
+		std::span<std::byte const> payload,
+		std::chrono::duration<double> delay,
+		FILE* stream)
 	{
 		store(anon::object{}
 			.insert_or_assign("message_type", T::message_type_id)
 			.insert_or_assign("payload_size", static_cast<uint64_t>(std::size(payload)))
+			.insert_or_assign("delay", delay.count())
 			.insert_or_assign("content", serialize(message)), stream);
 		write(payload, stream);
 	}

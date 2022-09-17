@@ -9,6 +9,7 @@
 
 #include <span>
 #include <string_view>
+#include <chrono>
 
 namespace playback
 {
@@ -21,6 +22,7 @@ namespace playback
 
 		void dispatch(std::string_view message_type,
 			anon::object const& content,
+			std::chrono::steady_clock::duration,
 			std::span<std::byte const> payload)
 		{
 			if(message_type == "video_frame_update")

@@ -29,9 +29,14 @@ int main()
 	auto test_pattern = playback::load_binary<vec4_t>("/usr/share/test_pattern/test_pattern.rgba");
 	auto const test_pattern_span = std::span{test_pattern};
 
+	static constexpr std::chrono::duration<double> delay{1.0/60.0};
+
 	while(true)
 	{
-		write_message(playback::video_frame_update{0}, std::as_bytes(test_pattern_span), stdout);
+		write_message(playback::video_frame_update{0},
+			std::as_bytes(test_pattern_span),
+			delay,
+			stdout);
 		fflush(stdout);
 		std::rotate(std::begin(test_pattern), std::begin(test_pattern) + 3200, std::end(test_pattern));
 	}
