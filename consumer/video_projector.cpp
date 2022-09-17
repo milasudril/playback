@@ -86,6 +86,7 @@ int main()
 	fprintf(stderr, "(i) Initialized OpenGL reporting version %s\n", glGetString(GL_VERSION));
 
 	glEnable(GL_FRAMEBUFFER_SRGB);
+	glEnable(GL_DEPTH_TEST);
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 
 	playback::gl_shader<GL_VERTEX_SHADER> vertex_shader{vertex_shader_src};

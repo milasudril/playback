@@ -5,6 +5,8 @@
 #include "./message_writer.hpp"
 #include "io_utils.hpp"
 
+#include <cmath>
+
 using vec4_t [[gnu::vector_size(16)]] = float;
 
 int main()
@@ -27,6 +29,6 @@ int main()
 	while(true)
 	{
 		write_message(playback::video_frame_update{0}, std::as_bytes(test_pattern_span), stdout);
-		std::rotate(std::begin(test_pattern), std::begin(test_pattern) + 10*1600, std::end(test_pattern));
+		std::rotate(std::begin(test_pattern), std::begin(test_pattern) + 3200, std::end(test_pattern));
 	}
 }
