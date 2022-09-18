@@ -8,6 +8,7 @@ obj{
 			intensity_transfer_function:str{linear\}
 			alpha_mode:str{premultiplied\}\;
 		\}
+		is_slow:u32{0\}
 	\}
 \}
 obj{
