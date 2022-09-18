@@ -28,23 +28,30 @@ playback::read_data_result playback::fd_reader::read_into(std::reference_wrapper
 	size_t bytes_to_read)
 {
 	std::byte* write_ptr = buffer.get();
-	while(bytes_to_read != 0)
-	{
-		if(m_read_ptr == m_end_ptr)
-		{
-			if(auto const res = fetch(); res != read_status::ready) [[unlikely]]
-			{
-				buffer.get() = write_ptr;
-				return read_data_result{bytes_to_read, res};
-			}
-		}
 
-		auto const n = std::min(static_cast<size_t>(m_end_ptr - m_read_ptr),
-			bytes_to_read);
+	// Drain buffer
+	if(m_read_ptr != m_end_ptr)
+	{
+		auto const n = std::min(static_cast<size_t>(m_end_ptr - m_read_ptr), bytes_to_read);
 		memcpy(write_ptr, m_read_ptr, n);
 		m_read_ptr += n;
 		write_ptr += n;
 		bytes_to_read -= n;
+	}
+
+	// Now read directly into output buffer
+	while(bytes_to_read != 0)
+	{
+		auto const res = do_read(m_fd, write_ptr, bytes_to_read);
+
+		if(res.first != read_status::ready)
+		{
+			buffer.get() = write_ptr;
+			return read_data_result{bytes_to_read, res.first};
+		}
+
+		bytes_to_read -= res.second;
+		write_ptr += res.second;
 	}
 
 	buffer.get() = write_ptr;
