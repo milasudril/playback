@@ -112,6 +112,11 @@ namespace playback
 			});
 		}
 
+		void set_window_title(char const* title)
+		{
+			glfwSetWindowTitle(m_window.get(), title);
+		}
+
 	private:
 		window_handle m_window;
 	};

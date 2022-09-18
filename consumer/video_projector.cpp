@@ -1,9 +1,13 @@
-//@	{ "target":{"name":"video_projector.o"}}
+//@	{
+//@		"target":{"name":"video_projector.o"}
+//@	}
 
 #include "./gl_video_device.hpp"
 #include "./nonblocking_fd.hpp"
 #include "./fd_reader.hpp"
 #include "./command_reader.hpp"
+
+#include "io_utils.hpp"
 
 #include <GL/gl.h>
 #include <thread>
@@ -72,6 +76,11 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 		video_out.render_content();
 		video_out.swap_buffer();
-		return eh.should_exit();
+		if(eh.should_exit())
+		{
+			dispatcher.set_should_terminate();
+			return true;
+		}
+		return false;
 	}, video_out, std::as_const(eh));
 }

@@ -124,6 +124,25 @@ namespace playback
 	anon::object serialize(video_frame_update const&);
 
 
+	struct set_caption
+	{
+		static constexpr char const* message_type_name = "set_caption";
+		std::string value;
+	};
+
+	inline set_caption deserialize(empty<set_caption>, anon::object const& obj)
+	{
+		set_caption ret{};
+		ret.value = std::get<std::string>(obj["value"]);
+		return ret;
+	}
+
+	inline anon::object serialize(set_caption const& obj)
+	{
+		return anon::object{}.insert_or_assign("value", obj.value);
+	}
+
+
 
 	struct command
 	{

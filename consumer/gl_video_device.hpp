@@ -93,6 +93,11 @@ void main()
 			});
 		}
 
+		void set_caption(char const* str)
+		{
+			gl_viewport::set_window_title(str);
+		}
+
 	private:
 		gl_shader<GL_VERTEX_SHADER> m_vert_shader;
 		gl_shader<GL_FRAGMENT_SHADER> m_frag_shader;

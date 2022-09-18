@@ -30,14 +30,19 @@ int main()
 	auto const test_pattern_span = std::span{test_pattern};
 
 	static constexpr std::chrono::duration<double> delay{1.0/30.0};
-
+	size_t k = 0;
 	while(true)
 	{
 		write_command(playback::video_frame_update{0},
 			std::as_bytes(test_pattern_span),
 			delay,
 			stdout);
+		if(k % 30 == 0)
+		{
+			write_command(playback::set_caption{std::to_string(k/30)}, std::span<std::byte>{}, std::chrono::seconds{0}, stdout);
+		}
 
 		std::rotate(std::begin(test_pattern), std::begin(test_pattern) + 6400, std::end(test_pattern));
+		++k;
 	}
 }

@@ -47,4 +47,14 @@ void playback::message_dispatcher::dispatch(command const& cmd)
 		auto const vfu = deserialize(empty<video_frame_update>{}, cmd.content);
 		m_video_out.get().set_pixels(vfu.video_port, cmd.payload);
 	}
+	else
+	if(cmd.message_type_name == "set_caption")
+	{
+		auto const sc = deserialize(empty<set_caption>{}, cmd.content);
+		m_video_out.get().set_caption(sc.value.c_str());
+	}
+	else
+	{
+		fprintf(stderr, "(!) Unspupported message type %s\n", cmd.message_type_name.c_str());
+	}
 }
