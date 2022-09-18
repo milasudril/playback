@@ -3,6 +3,8 @@
 #ifndef PLAYBACK_MESSAGES_HPP
 #define PLAYBACK_MESSAGES_HPP
 
+#include "./uninitialized_buffer.hpp"
+
 #include <anon/object.hpp>
 
 #include <cstdint>
@@ -124,7 +126,7 @@ namespace playback
 		std::string message_type_name;
 		anon::object content;
 		std::chrono::steady_clock::duration delay;
-		std::vector<std::byte> payload;
+		uninitialized_buffer<std::byte> payload;
 	};
 }
 

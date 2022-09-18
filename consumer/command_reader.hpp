@@ -34,6 +34,7 @@ namespace playback
 		state m_state;
 
 		command m_cmd;
+		std::byte* m_buffer_ptr;
 		uint64_t m_bytes_to_read;
 	};
 }

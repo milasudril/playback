@@ -33,7 +33,8 @@ void playback::command_reader::read_and_dispatch()
 					m_state = state::payload;
 
 					m_bytes_to_read = std::get<uint64_t>(i->second);
-					m_cmd.payload.reserve(m_bytes_to_read);
+					m_cmd.payload = uninitialized_buffer<std::byte>{m_bytes_to_read};
+					m_buffer_ptr = std::data(m_cmd.payload);
 					m_state = state::payload;
 				}
 				else
@@ -45,7 +46,7 @@ void playback::command_reader::read_and_dispatch()
 
 		case state::payload:
 		{
-			auto const res = src.read_into(m_cmd.payload, m_bytes_to_read);
+			auto const res = src.read_into(std::ref(m_buffer_ptr), m_bytes_to_read);
 			switch(res.status)
 			{
 				case read_status::ready:
@@ -54,7 +55,6 @@ void playback::command_reader::read_and_dispatch()
 					{
 						m_dispatcher.get().enqueue(std::move(m_cmd));
 						m_state = state::message;
-						m_cmd.payload.clear();
 					}
 					break;
 

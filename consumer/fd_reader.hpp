@@ -80,7 +80,7 @@ namespace playback
 			return read_byte_result{ret, read_status::ready};
 		}
 
-		read_data_result read_into(std::vector<std::byte>& buffer, size_t bytes_to_read);
+		read_data_result read_into(std::reference_wrapper<std::byte*> buffer, size_t bytes_to_read);
 
 		bool at_eof()
 		{
