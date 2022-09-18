@@ -1,3 +1,5 @@
+//@	{"dependencies_extra":[{"ref":"./message_dispatcher.o", "rel":"implementation"}]}
+
 #ifndef PLAYBACK_MESSAGEDISPATCHER_HPP
 #define PLAYBACK_MESSAGEDISPATCHER_HPP
 
@@ -43,41 +45,7 @@ namespace playback
 			m_commands.push(std::move(cmd));
 		}
 
-		void flush_expired_commands(clock::time_point now)
-		{
-			while(true)
-			{
-				auto res = m_commands.with_lock([last_event = m_last_event, now](auto& queue) {
-					if(queue.empty())
-					{ return std::pair{std::optional<command>{}, last_event}; }
-
-					auto const delay = queue.front().delay;
-					auto const current_event = last_event + delay;
-					if(current_event <= now)
-					{
-						auto ret = std::pair{std::optional{std::move(queue.front())}, current_event};
-						queue.pop();
-						return ret;
-					}
-					else
-					{ return std::pair{std::optional<command>{}, last_event}; }
-				}) ;
-
-				if(res.first.has_value())
-				{
-					auto const& cmd = *res.first;
-					std::lock_guard lock{m_size_mtx};
-					m_est_queue_size -= std::size(cmd.payload) + sizeof(anon::object);
-					m_size_cv.notify_one();
-					m_last_event = res.second;
-					dispatch(cmd);
-				}
-				else
-				{
-					return;
-				}
-			}
-		}
+		void flush_expired_commands(clock::time_point now);
 
 	private:
 		std::reference_wrapper<gl_video_device> m_video_out;
