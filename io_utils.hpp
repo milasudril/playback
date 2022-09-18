@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <memory>
 #include <cstdio>
+#include <vector>
 
 namespace playback
 {

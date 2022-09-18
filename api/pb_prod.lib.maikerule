@@ -1,0 +1,4 @@
+{
+	"target":{"name":"libpb_prod.a"},
+	"dependencies":[{"ref":"./messages.o", "rel":"implementation", "origin":"generated"}]
+}
