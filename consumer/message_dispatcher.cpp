@@ -39,3 +39,12 @@ void playback::message_dispatcher::flush_expired_commands(clock::time_point now)
 		}
 	}
 }
+
+void playback::message_dispatcher::dispatch(command const& cmd)
+{
+	if(cmd.message_type_name == "video_frame_update")
+	{
+		auto const vfu = deserialize(empty<video_frame_update>{}, cmd.content);
+		m_video_out.get().set_pixels(vfu.video_port, cmd.payload);
+	}
+}

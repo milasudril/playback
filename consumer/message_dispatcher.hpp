@@ -25,14 +25,7 @@ namespace playback
 		m_est_queue_size{0}
 		{}
 
-		void dispatch(command const& cmd)
-		{
-			if(cmd.message_type_name == "video_frame_update")
-			{
-				auto const vfu = deserialize(empty<video_frame_update>{}, cmd.content);
-				m_video_out.get().set_pixels(vfu.video_port, cmd.payload);
-			}
-		}
+		void dispatch(command const& cmd);
 
 		void enqueue(command&& cmd)
 		{
