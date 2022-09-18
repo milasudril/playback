@@ -1,16 +1,9 @@
-//@	{
-//@		"target":{"name":"video_projector.o",
-//@		"dependencies":[
-//@			{"ref": "anon", "origin":"system", "rel":"external"}
-//@		]}
-//@	}
+//@	{ "target":{"name":"video_projector.o"}}
 
 #include "./gl_video_device.hpp"
 #include "./nonblocking_fd.hpp"
 #include "./fd_reader.hpp"
 #include "./command_reader.hpp"
-
-#include "io_utils.hpp"
 
 #include <GL/gl.h>
 #include <thread>

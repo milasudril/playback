@@ -1,4 +1,7 @@
-//@	{"dependencies_extra":[{"ref":"./messages.o", "rel":"implementation"}]}
+//@	{
+//@	 "dependencies":[{"ref": "anon", "origin":"pkg-config"}],
+//@	 "dependencies_extra":[{"ref":"./messages.o", "rel":"implementation"}]
+//@	}
 
 #ifndef PLAYBACK_MESSAGES_HPP
 #define PLAYBACK_MESSAGES_HPP

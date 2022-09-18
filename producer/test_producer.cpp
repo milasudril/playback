@@ -2,7 +2,7 @@
 //@		"target":{"name":"test_producer.o"}
 //@	}
 
-#include "./message_writer.hpp"
+#include "api/message_writer.hpp"
 #include "io_utils.hpp"
 
 #include <cmath>
@@ -29,7 +29,7 @@ int main()
 	auto test_pattern = playback::load_binary<vec4_t>("/usr/share/test_pattern/test_pattern.rgba");
 	auto const test_pattern_span = std::span{test_pattern};
 
-	static constexpr std::chrono::duration<double> delay{1.0/60.0};
+	static constexpr std::chrono::duration<double> delay{1.0/30.0};
 
 	while(true)
 	{
@@ -38,6 +38,6 @@ int main()
 			delay,
 			stdout);
 
-		std::rotate(std::begin(test_pattern), std::begin(test_pattern) + 3200, std::end(test_pattern));
+		std::rotate(std::begin(test_pattern), std::begin(test_pattern) + 6400, std::end(test_pattern));
 	}
 }

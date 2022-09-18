@@ -4,7 +4,6 @@
 #include "./gl_viewport.hpp"
 #include "./gl_video_port.hpp"
 #include "./gl_shader.hpp"
-#include "messages.hpp"
 
 #include <algorithm>
 

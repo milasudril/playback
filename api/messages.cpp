@@ -1,6 +1,6 @@
 //@	{"target":{"name":"messages.o"}}
 
-#include "messages.hpp"
+#include "./messages.hpp"
 
 playback::intensity_transfer_function playback::deserialize(empty<intensity_transfer_function>,
 	std::string_view str)

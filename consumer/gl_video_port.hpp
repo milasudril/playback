@@ -3,7 +3,8 @@
 
 #include "./gl_mesh.hpp"
 #include "./gl_texture.hpp"
-#include "messages.hpp"
+
+#include "api/messages.hpp"
 
 namespace playback
 {

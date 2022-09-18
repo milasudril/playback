@@ -6,10 +6,6 @@
 #include "./gl_video_device.hpp"
 #include "./threadsafe_queue.hpp"
 
-#include "messages.hpp"
-
-#include <anon/object.hpp>
-#include <queue>
 #include <condition_variable>
 
 namespace playback
