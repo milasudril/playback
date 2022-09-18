@@ -23,6 +23,7 @@ int main()
 		.alpha_mode = playback::alpha_mode::premultiplied,
 		.num_mipmaps = 10
 	});
+	cfg.is_slow = false;
 	write(cfg, stdout);
 
 	auto test_pattern = playback::load_binary<vec4_t>("/usr/share/test_pattern/test_pattern.rgba");

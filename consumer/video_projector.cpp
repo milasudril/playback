@@ -59,7 +59,10 @@ int main()
 	auto const stream_cfg = deserialize(playback::empty<playback::stream_config>{}, anon::load(reader));
 	video_out.configure(stream_cfg.video_ports);
 
-	playback::nonblocking_fd unnblock_stdin{STDIN_FILENO};
+	auto unnblock_stdin = stream_cfg.is_slow?
+		std::optional<playback::nonblocking_fd>{STDIN_FILENO}:
+		std::optional<playback::nonblocking_fd>{};
+
 	playback::message_dispatcher dispatcher{video_out};
 
 	std::jthread reader_thread{[&reader, &dispatcher, &eh]() {

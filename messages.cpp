@@ -156,6 +156,7 @@ playback::stream_config playback::deserialize(empty<stream_config>, anon::object
 		[](auto const& item) {
 			return deserialize(empty<video_port_config>{}, item);
 	});
+	ret.is_slow = std::get<uint32_t>(obj["is_slow"]) == 1;
 	return ret;
 }
 
@@ -166,7 +167,10 @@ anon::object playback::serialize(stream_config const& cfg)
 		return serialize(item);
 	});
 
-	return anon::object{}.insert_or_assign("video_ports", std::move(video_ports));
+	return anon::object{}
+		.insert_or_assign("video_ports", std::move(video_ports))
+		.insert_or_assign("is_slow", cfg.is_slow?
+			static_cast<uint32_t>(1) : static_cast<uint32_t>(0));
 }
 
 struct video_frame_update

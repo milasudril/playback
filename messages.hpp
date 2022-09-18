@@ -101,6 +101,7 @@ namespace playback
 	struct stream_config
 	{
 		std::vector<video_port_config> video_ports;
+		bool is_slow;
 	};
 
 	stream_config deserialize(empty<stream_config>, anon::object const&);
