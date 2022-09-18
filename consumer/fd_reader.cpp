@@ -5,6 +5,25 @@
 #include <unistd.h>
 #include <cstring>
 
+namespace
+{
+	std::pair<playback::read_status, size_t> do_read(int fd, std::byte* buffer, size_t buffer_size)
+	{
+		auto res = ::read(fd, buffer, buffer_size);
+		switch(res)
+		{
+			case 0:
+				return {playback::read_status::eof, res};
+
+			case -1:
+				return {playback::read_status::blocking, res};
+
+			default:
+				return {playback::read_status::ready, res};
+		}
+	}
+}
+
 playback::read_data_result playback::fd_reader::read_into(std::reference_wrapper<std::byte*> buffer,
 	size_t bytes_to_read)
 {
@@ -34,18 +53,11 @@ playback::read_data_result playback::fd_reader::read_into(std::reference_wrapper
 
 playback::read_status playback::fd_reader::fetch()
 {
-	auto res = ::read(m_fd, std::data(m_buffer), std::size(m_buffer));
-	switch(res)
+	auto res = do_read(m_fd, std::data(m_buffer), std::size(m_buffer));
+	if(res.first == read_status::ready)
 	{
-		case 0:
-			return read_status::eof;
-
-		case -1:
-			return read_status::blocking;
-
-		default:
-			m_read_ptr = std::data(m_buffer);
-			m_end_ptr = m_read_ptr + res;
-			return read_status::ready;
+		m_read_ptr = std::data(m_buffer);
+		m_end_ptr = m_read_ptr + res.second;
 	}
+	return res.first;
 }
