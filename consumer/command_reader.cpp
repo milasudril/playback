@@ -12,12 +12,12 @@ namespace
 	}
 }
 
-void playback::command_reader::read_and_dispatch()
+bool playback::command_reader::read_and_dispatch()
 {
 	auto& src = m_loader.source();
 
 	if(src.at_eof()) [[unlikely]]
-	{ return; }
+	{ return true; }
 
 	switch(m_state)
 	{
@@ -71,4 +71,5 @@ void playback::command_reader::read_and_dispatch()
 		default:
 			__builtin_unreachable();
 	}
+	return false;
 }

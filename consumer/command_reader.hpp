@@ -22,7 +22,7 @@ namespace playback
 			m_state{state::message}
 		{}
 
-		void read_and_dispatch();
+		bool read_and_dispatch();
 
 		void flush_expired_commands(std::chrono::steady_clock::time_point now)
 		{ m_dispatcher.get().flush_expired_commands(now); }

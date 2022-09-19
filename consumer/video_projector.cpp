@@ -64,10 +64,7 @@ int main()
 
 	std::jthread reader_thread{[&reader, &dispatcher, &eh]() {
 		playback::command_reader cmd_reader{reader, dispatcher};
-		while(!eh.should_exit())
-		{
-			cmd_reader.read_and_dispatch();
-		}
+		while(!(eh.should_exit() || cmd_reader.read_and_dispatch()));
 	}};
 
 	ctxt.read_events([&dispatcher]
